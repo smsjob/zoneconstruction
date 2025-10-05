@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>À propos — ZoneConstruction.ca</title>
+  <meta name="description" content="À propos de ZoneConstruction.ca — plateforme d’emplois pour l’industrie de la construction au Québec.">
+  <style>
+    :root{--line:#eaeaea;--brand:#f9a533;--text:#161616}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:#fff}
+    header{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:10}
+    nav{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;gap:22px}
+    nav a{text-decoration:none;color:#111}
+    nav a.active{border-bottom:3px solid #111}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1{margin:16px 0}
+    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fafafa;margin:12px 0}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .pill{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0}
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="emplois.html">Emplois</a>
+    <a href="annoncer.html">Annoncer</a>
+    <a href="contact.html">Contact</a>
+    <a class="active" href="apropos.html">À Propos</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>À propos</h1>
+
+  <div class="card">
+    <h2 style="margin-top:0">Notre mission</h2>
+    <p><strong>ZoneConstruction.ca</strong> facilite le recrutement dans l’industrie de la construction au Québec : une plateforme simple, locale et optimisée SEO (Google Jobs) pour mettre en relation employeurs et candidats qualifiés.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Ce que nous offrons</h2>
+    <div class="grid grid-2">
+      <div>
+        <h3 style="margin:8px 0">Pour les employeurs</h3>
+        <ul>
+          <li>Publication d’offres en 5 minutes (paiement sécurisé Stripe)</li>
+          <li>Diffusion sur la carte interactive et filtrage par métier/région/secteur</li>
+          <li>Schéma <code>JobPosting</code> pour la visibilité Google Jobs</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin:8px 0">Pour les candidats</h3>
+        <ul>
+          <li>Recherche par proximité et par filtres</li>
+          <li>Infos claires (salaire, lieu, type d’emploi)</li>
+          <li>Lien direct pour postuler</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Technologies</h2>
+    <p>Site statique hébergé sur GitHub Pages, carte <em>OpenLayers</em> (OpenStreetMap), données d’emplois servies via Google Sheets + Apps Script, paiements via Stripe Checkout.</p>
+    <p>
+      <span class="pill">GitHub Pages</span>
+      <span class="pill">OpenLayers</span>
+      <span class="pill">Google Sheets</span>
+      <span class="pill">Apps Script</span>
+      <span class="pill">Stripe</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Processus d’annonce</h2>
+    <ol>
+      <li>Paiement sécurisé sur la page <a href="annoncer.html">Annoncer</a>.</li>
+      <li>Remplissage du formulaire avec les détails du poste.</li>
+      <li>Mise en ligne immédiate et visibilité sur la carte / Google Jobs.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- JSON-LD AboutPage (SEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "À propos — ZoneConstruction.ca",
+  "url": "https://YOUR_USER.github.io/zoneconstruction/apropos.html",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ZoneConstruction.ca",
+    "url": "https://YOUR_USER.github.io/zoneconstruction/"
+  },
+  "description": "Plateforme d’emplois pour l’industrie de la construction au Québec."
+}
+</script>
+</body>
+</html>
