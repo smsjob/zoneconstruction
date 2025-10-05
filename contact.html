@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — ZoneConstruction.ca</title>
+  <meta name="description" content="Contactez ZoneConstruction.ca pour publier une offre ou obtenir du support.">
+  <style>
+    :root{--line:#eaeaea;--brand:#f9a533;--text:#161616}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:#fff}
+    header{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:10}
+    nav{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;gap:22px}
+    nav a{text-decoration:none;color:#111}
+    nav a.active{border-bottom:3px solid #111}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1{margin:16px 0}
+    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fafafa;margin:12px 0}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer}
+    address{font-style:normal;line-height:1.6}
+    a[href^="tel:"]{white-space:nowrap}
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="emplois.html">Emplois</a>
+    <a href="annoncer.html">Annoncer</a>
+    <a class="active" href="contact.html">Contact</a>
+    <a href="apropos.html">À Propos</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>Contact</h1>
+
+  <div class="card">
+    <h2 style="margin-top:0">Coordonnées</h2>
+    <address>
+      SMS Job Inc.<br>
+      4388 Rue Saint-Denis, Suite 200-717<br>
+      Montréal (QC) H2J&nbsp;2L1 — Canada
+    </address>
+    <p>
+      Courriel&nbsp;: <a class="btn" href="mailto:info@zoneconstruction.ca">info@zoneconstruction.ca</a>
+      &nbsp;&nbsp;Téléphone&nbsp;: <a href="tel:+15145551234">+1&nbsp;514&nbsp;555-1234</a>
+    </p>
+    <p>
+      Google Maps&nbsp;: <a href="https://maps.google.com/?q=4388%20Rue%20Saint-Denis%20Montr%C3%A9al%20QC%20H2J%202L1" target="_blank" rel="noopener">ouvrir l’itinéraire</a>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Support & Publication</h2>
+    <div class="grid grid-2">
+      <div>
+        <h3 style="margin:8px 0">Publier une offre</h3>
+        <p>Pour publier une annonce, utilisez la page <a href="annoncer.html">Annoncer</a>. Le paiement est sécurisé via Stripe, puis vous remplissez le formulaire.</p>
+      </div>
+      <div>
+        <h3 style="margin:8px 0">Assistance</h3>
+        <p>Une question sur une annonce ou un reçu&nbsp;? Écrivez-nous à <a href="mailto:info@zoneconstruction.ca">info@zoneconstruction.ca</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JSON-LD Organization (SEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ZoneConstruction.ca",
+  "url": "https://YOUR_USER.github.io/zoneconstruction/",
+  "email": "info@zoneconstruction.ca",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4388 Rue Saint-Denis, Suite 200-717",
+    "addressLocality": "Montréal",
+    "addressRegion": "QC",
+    "postalCode": "H2J 2L1",
+    "addressCountry": "CA"
+  }
+}
+</script>
+</body>
+</html>
