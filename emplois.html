@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emplois — ZoneConstruction.ca</title>
+
+  <!-- OpenLayers -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/dist/ol.css">
+  <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
+
+  <style>
+    /* Header/Nav minimal pour s’intégrer avec le site */
+    :root{ --line:#eaeaea; --brand:#f9a533; --text:#161616; }
+    *{box-sizing:border-box}
+    body, html { margin:0; padding:0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background:#f4f4f4; color:var(--text); }
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+    nav{max-width:1200px;margin:0 auto;display:flex;gap:22px;align-items:center;padding:14px 20px}
+    nav a{color:var(--text);text-decoration:none}
+    nav a.active{border-bottom:3px solid var(--text)}
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1{margin:18px 0}
+
+    /* Ton UI carte + filtres */
+    .filters { margin-bottom: 20px; }
+    .filter-row { display: flex; gap: 20px; margin-bottom: 10px; }
+    .filter-item { flex: 1; }
+    .filter-item label { font-weight: bold; margin-right: 5px; }
+    .filter-item select { width: 100%; padding: 5px 10px; font-size: 14px; background-color: #fff; color: #333; }
+    .main-container { display: flex; gap: 10px; height: 600px; }
+    #job-list { width: 30%; background: #fff; border-right: 1px solid #ccc; padding: 10px; display: flex; flex-direction: column; }
+    #get-location { display: block; margin-bottom: 10px; padding: 8px 12px; font-size: 14px; background: #0073e6; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    #get-location:hover { background: #005bb5; }
+    #job-list-items { flex: 1; max-height: 500px; overflow-y: auto; }
+    .job-item { border-bottom: 1px solid #ddd; padding: 10px; cursor: pointer; }
+    .job-item:hover { background: #f0f0f0; }
+    .job-item h3 { margin: 0 0 5px; font-size: 16px; }
+    .popup {
+      background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;
+      font-size: 14px; line-height: 1.4; max-height: 200px; overflow-y: auto; width: 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.3);
+    }
+    .btn { display:inline-block; padding:4px 8px; background:#0073e6; color:white; border-radius:4px; text-decoration:none; font-size:13px; }
+    .btn:hover { background:#005bb5; }
+    #map { width: 70%; height: 100%; border: 1px solid #ccc; }
+    .notice{background:#fff3cd;border:1px solid #ffe69c;padding:10px;border-radius:6px;margin-bottom:10px}
+    .error{background:#fdecea;border:1px solid #f5c2c7;color:#b02a37}
+
+    @media (max-width: 768px) {
+      .main-container { flex-direction: column-reverse; height: auto; }
+      #map { width: 100%; height: 320px; }
+      #job-list { width: 100%; }
+      .filter-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="emplois.html" class="active">Emplois</a>
+    <a href="annoncer.html">Annoncer</a>
+    <a href="contact.html">Contact</a>
+    <a href="apropos.html">À Propos</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Offres d’emploi</h1>
+
+  <div id="msg" class="notice" style="display:none"></div>
+
+  <div class="filters">
+    <div class="filter-row">
+      <div class="filter-item">
+        <label for="filter-metier">Métier:</label>
+        <select id="filter-metier"><option value="all">Tout</option></select>
+      </div>
+      <div class="filter-item">
+        <label for="filter-niveau">Niveau:</label>
+        <select id="filter-niveau"><option value="all">Tout</option></select>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-item">
+        <label for="filter-region">Région:</label>
+        <select id="filter-region"><option value="all">Tout</option></select>
+      </div>
+      <div class="filter-item">
+        <label for="filter-secteur">Secteur:</label>
+        <select id="filter-secteur"><option value="all">Tout</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div id="job-list">
+      <button id="get-location">Emplois les plus proches</button>
+      <div id="job-list-items"></div>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
+<script>
+  // ====== 1) URLS (garde les tiens) ======
+  const mapJsonUrl = 'https://script.google.com/macros/s/AKfycbzfEPL-RwaT_mBSeI7RGQrWZ1OY14ip13r-AonSrpB6puAjyEg3wSGWhN9lct0fHZB2iQ/exec?view=map';
+  const googleJobsJsonUrl = 'https://script.google.com/macros/s/AKfycbzfEPL-RwaT_mBSeI7RGQrWZ1OY14ip13r-AonSrpB6puAjyEg3wSGWhN9lct0fHZB2iQ/exec';
+
+  // ====== 2) Helpers ======
+  const qs = new URLSearchParams(location.search);
+  const $ = sel => document.querySelector(sel);
+  function msg(text, type='notice'){ const m=$('#msg'); m.textContent=text; m.className= type==='error'?'notice error':'notice'; m.style.display='block'; }
+
+  // ====== 3) Carte OpenLayers (identique à ton code) ======
+  let jobsArray = [];
+  const map = new ol.Map({
+    target: 'map',
+    layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+    view: new ol.View({ center: ol.proj.fromLonLat([-73.5673, 45.5017]), zoom: 12 }),
+    controls: []
+  });
+
+  const markerStyle = new ol.style.Style({
+    image: new ol.style.Icon({ anchor: [0.5, 1], src: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png', scale: 1 })
+  });
+
+  const vectorSource = new ol.source.Vector({});
+  const markersLayer = new ol.layer.Vector({ source: vectorSource });
+  map.addLayer(markersLayer);
+
+  const popupContainer = document.createElement('div');
+  popupContainer.className = 'popup';
+  const popupOverlay = new ol.Overlay({ element: popupContainer, positioning: 'bottom-center', offset: [0, -10] });
+  map.addOverlay(popupOverlay);
+
+  map.on('click', evt => {
+    const feature = map.forEachFeatureAtPixel(evt.pixel, f => f);
+    if (feature) {
+      popupContainer.innerHTML = feature.get('details');
+      popupOverlay.setPosition(feature.getGeometry().getCoordinates());
+    } else {
+      popupOverlay.setPosition(undefined);
+    }
+  });
+
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371, toRad = x => x * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
+    return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function populateFilter(id, values) {
+    const select = document.getElementById(id);
+    select.innerHTML = '<option value="all">Tout</option>';
+    [...values].sort((a,b)=>a.localeCompare(b,'fr',{sensitivity:'base'})).forEach(val => {
+      if(!val) return;
+      const opt = document.createElement('option');
+      opt.value = val.trim().toLowerCase();
+      opt.textContent = val.trim();
+      select.appendChild(opt);
+    });
+  }
+
+  function applyFilters() {
+    const metier = document.getElementById('filter-metier').value;
+    const niveau = document.getElementById('filter-niveau').value;
+    const region = document.getElementById('filter-region').value;
+    const secteur = document.getElementById('filter-secteur').value;
+
+    // sync URL (partage d’un filtre)
+    const p = new URLSearchParams();
+    if(metier!=='all')  p.set('metier',metier);
+    if(niveau!=='all')  p.set('niveau',niveau);
+    if(region!=='all')  p.set('region',region);
+    if(secteur!=='all') p.set('secteur',secteur);
+    const newUrl = location.pathname + (p.toString()?('?'+p.toString()):'');
+    history.replaceState(null,'',newUrl);
+
+    vectorSource.clear();
+    $('#job-list-items').innerHTML = '';
+    jobsArray.forEach(job => {
+      const d = job.data;
+      const match =
+        (metier === 'all' || (d["Job Category"] || "").toLowerCase().includes(metier)) &&
+        (niveau === 'all' || (d["qualifications"] || "").toLowerCase().includes(niveau)) &&
+        (region === 'all' || (d["Region"] || "").toLowerCase().includes(region)) &&
+        (secteur === 'all' || (d["Secteur"] || "").toLowerCase().includes(secteur));
+
+      if (match) {
+        vectorSource.addFeature(job.feature);
+        const div = document.createElement('div');
+        div.className = 'job-item';
+        const distanceText = job.distance !== null ? ` (${job.distance.toFixed(1)} km)` : '';
+
+        // salaire (fallback)
+        let salary = d["Salary Display"] || '';
+        if (!salary && (d["Min Salary"] || d["Max Salary"])) {
+          const min = d["Min Salary"], max = d["Max Salary"], currency = d["Currency"] || "CAD", unit = (d["Salary Unit"] || "").toLowerCase();
+          if (min && max) salary = `${min} – ${max} ${currency} / ${unit}`;
+          else if (min)    salary = `À partir de ${min} ${currency} / ${unit}`;
+          else if (max)    salary = `Jusqu’à ${max} ${currency} / ${unit}`;
+        }
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:flex-start; gap:10px;">
+            ${d["Logo URL"] ? `<img src="${d["Logo URL"]}" style="max-height:40px; max-width:40px; object-fit:contain; border-radius:4px;">` : ""}
+            <h3 style="margin:0;">${d["Company Name"] || "Inconnu"}${distanceText}</h3>
+          </div>
+          <div style="font-size:13px; margin-top:6px;">
+            <strong>Catégories:</strong> ${[d["Job Category"], d["qualifications"], d["Region"], d["Secteur"]].filter(Boolean).join(", ")}<br/>
+            ${salary ? `<strong>Salaire:</strong> ${salary}<br/>` : ""}
+            <strong>Description:</strong><br/>${d["Job Description"] || "Non fournie"}<br/>
+            <strong>Comment appliquer:</strong><br/>${d["instructions"] || "Non spécifié"}<br/>
+            ${d["email"] ? `<div style="margin-top:6px;"><a href="mailto:${(d["email"]||'').trim()}" class="btn">📧 Appliquer maintenant</a></div>` : ""}
+            ${d["Company Website"] ? `<div style="margin-top:4px;"><a href="${d["Company Website"]}" class="btn" target="_blank" rel="noopener">🌐 Visiter le site</a></div>` : ""}
+          </div>
+        `;
+        div.addEventListener('click', () => {
+          popupContainer.innerHTML = job.feature.get('details');
+          popupOverlay.setPosition(job.feature.getGeometry().getCoordinates());
+          map.getView().animate({ center: job.feature.getGeometry().getCoordinates(), zoom: 14 });
+        });
+        $('#job-list-items').appendChild(div);
+      }
+    });
+  }
+
+  async function addMarkers() {
+    try{
+      const res = await fetch(mapJsonUrl, {cache:'no-store'});
+      if(!res.ok) throw new Error('API indisponible');
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('Format inattendu');
+
+      const metiers = new Set(), niveaux = new Set(), regions = new Set(), secteurs = new Set();
+
+      data.forEach(job => {
+        if (!job.Latitude || !job.Longitude) return;
+
+        let salary = job["Salary Display"] || '';
+        if (!salary && (job["Min Salary"] || job["Max Salary"])) {
+          const min = job["Min Salary"], max = job["Max Salary"], currency = job["Currency"] || "CAD", unit = (job["Salary Unit"] || "").toLowerCase();
+          if (min && max)      salary = `${min} – ${max} ${currency} / ${unit}`;
+          else if (min)        salary = `À partir de ${min} ${currency} / ${unit}`;
+          else if (max)        salary = `Jusqu’à ${max} ${currency} / ${unit}`;
+        }
+        const categories = [job["Job Category"], job["qualifications"], job["Region"], job["Secteur"]].filter(Boolean).join(', ');
+
+        const html = `
+          <div style="display:flex; align-items:flex-start; gap:10px;">
+            ${job["Logo URL"] ? `<img src="${job["Logo URL"]}" alt="Logo" style="max-width:50px; max-height:50px; object-fit:contain; border-radius:4px;">` : ""}
+            <h3 style="margin:0;">${job["Company Name"] || "Inconnu"}</h3>
+          </div>
+          <div style="font-size:13px; margin-top:8px;">
+            <strong>Catégories:</strong> ${categories}<br/>
+            ${salary ? `<strong>Salaire:</strong> ${salary}<br/>` : ""}
+            <strong>Description:</strong><br/>${job["Job Description"] || "Non fournie"}<br/>
+            <strong>Comment appliquer:</strong><br/>${job["instructions"] || "Non spécifié"}<br/>
+            ${job["email"] ? `<div style="margin-top:8px;"><a href="mailto:${(job["email"]||'').trim()}" class="btn">📧 Appliquer maintenant</a></div>` : ""}
+            ${job["Company Website"] ? `<div style="margin-top:4px;"><a href="${job["Company Website"]}" target="_blank" rel="noopener" class="btn">🌐 Visiter le site</a></div>` : ""}
+          </div>
+        `;
+
+        const feature = new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(job.Longitude), parseFloat(job.Latitude)]))
+        });
+        feature.set('details', html);
+        feature.setStyle(markerStyle);
+        vectorSource.addFeature(feature);
+
+        jobsArray.push({ data: job, feature, distance: null });
+
+        (job["Job Category"] || "").split(',').forEach(v => metiers.add(v.trim()));
+        (job["qualifications"] || "").split(',').forEach(v => niveaux.add(v.trim()));
+        (job["Region"] || "").split(',').forEach(v => regions.add(v.trim()));
+        (job["Secteur"] || "").split(',').forEach(v => secteurs.add(v.trim()));
+      });
+
+      populateFilter('filter-metier', metiers);
+      populateFilter('filter-niveau', niveaux);
+      populateFilter('filter-region', regions);
+      populateFilter('filter-secteur', secteurs);
+
+      // Pré-remplissage depuis l’URL (ex: ?metier=électricien&region=montréal)
+      ['metier','niveau','region','secteur'].forEach(k=>{
+        const v = (qs.get(k)||'').toLowerCase();
+        if(v) { const sel = document.getElementById('filter-'+k); if (sel) sel.value = v; }
+      });
+
+      applyFilters();
+    }catch(err){
+      console.error(err);
+      msg("Impossible de charger les offres pour le moment.", 'error');
+    }
+  }
+
+  // Tri par proximité
+  document.getElementById('get-location').addEventListener('click', () => {
+    if (!navigator.geolocation) return alert("Géolocalisation non supportée.");
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude, longitude } = pos.coords;
+      jobsArray.forEach(job => {
+        job.distance = haversineDistance(latitude, longitude, parseFloat(job.data.Latitude), parseFloat(job.data.Longitude));
+      });
+      jobsArray.sort((a, b) => (a.distance ?? 1e9) - (b.distance ?? 1e9));
+      applyFilters();
+      map.getView().animate({center: ol.proj.fromLonLat([longitude, latitude]), zoom: 12});
+    }, ()=>alert("Impossible d’obtenir votre position."));
+  });
+
+  ['metier', 'niveau', 'region', 'secteur'].forEach(f => {
+    document.getElementById(`filter-${f}`).addEventListener('change', applyFilters);
+  });
+
+  // JSON-LD pour Google Jobs (optionnel – tu l’avais déjà)
+  async function loadGoogleJobsStructuredData() {
+    try{
+      const res = await fetch(googleJobsJsonUrl, {cache:'no-store'});
+      const jobs = await res.json();
+      if (Array.isArray(jobs)) {
+        jobs.forEach(job => {
+          const script = document.createElement('script');
+          script.type = 'application/ld+json';
+          script.text = JSON.stringify(job);
+          document.head.appendChild(script);
+        });
+      }
+    }catch(e){ /* silencieux */ }
+  }
+
+  addMarkers();
+  loadGoogleJobsStructuredData();
+</script>
+
+</body>
+</html>
