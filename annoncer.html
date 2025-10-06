@@ -13,11 +13,10 @@
     nav a.active{border-bottom:3px solid #111}
     .wrap{max-width:900px;margin:0 auto;padding:20px}
     .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff;margin:12px 0}
-    label{font-weight:700} input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
-    .grid{display:grid;gap:16px}
-    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    label{font-weight:700} input,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
+    .grid{display:grid;gap:16px} .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer}
-    .notice{background:#fff3cd;border:1px solid #ffe69c;padding:10px;border-radius:8px}
+    .notice{background:#fff3cd;border:1px solid #ffe69c;padding:10px;border-radius:8px;margin:8px 0}
   </style>
 </head>
 <body>
@@ -30,100 +29,55 @@
 </nav></header>
 
 <div class="wrap">
-  <h1>Annoncer votre emploi</h1>
+  <h1>Publier une offre</h1>
+  <p class="notice">Remplissez le formulaire puis cliquez “Continuer au paiement”.</p>
 
-  <!-- Étape 1: Paiement -->
-  <div id="pay" class="card">
-    <p>Étape 1 — Paiement: <strong>20 $ CAD / semaine</strong>.</p>
-    <p><a id="payLink" class="btn" href="#" target="_top">Payer avec Stripe</a></p>
-    <p class="notice">Après paiement, vous serez redirigé ici automatiquement pour remplir le formulaire.</p>
-  </div>
-
-  <!-- Étape 2: Formulaire -->
-  <div id="formCard" class="card" style="display:none">
-    <p class="notice">Paiement confirmé ✅ — Remplissez le formulaire ci-dessous.</p>
+  <div class="card">
     <form id="jobForm" class="grid">
       <div class="grid grid-2">
-        <div><label>Titre</label><input name="titre" required></div>
-        <div><label>Entreprise</label><input name="entreprise" required></div>
+        <div><label>Job Title</label><input name="Job Title" required></div>
+        <div><label>Company Name</label><input name="Company Name" required></div>
       </div>
-
+      <div><label>Job Description</label><textarea name="Job Description" rows="6" required></textarea></div>
       <div class="grid grid-2">
-        <div><label>Métier</label><input name="metier" placeholder="Électricien, Charpentier..."></div>
-        <div><label>Niveau</label><input name="niveau" placeholder="Apprenti, Compagnon..."></div>
+        <div><label>Job Category</label><input name="Job Category" placeholder="Électricien..."></div>
+        <div><label>qualifications</label><input name="qualifications" placeholder="Apprenti, Compagnon..."></div>
       </div>
-
       <div class="grid grid-2">
-        <div><label>Région</label><input name="region" placeholder="Montréal, Laval..."></div>
-        <div><label>Secteur</label><input name="secteur" placeholder="Résidentiel, Industriel..."></div>
+        <div><label>Region</label><input name="Region" placeholder="Montréal..."></div>
+        <div><label>Secteur</label><input name="Secteur" placeholder="Résidentiel, Industriel..."></div>
       </div>
-
       <div class="grid grid-2">
-        <div><label>Salaire</label><input name="salaire" placeholder="$ / h"></div>
-        <div><label>URL du site (optionnel)</label><input name="site" placeholder="https://..."></div>
+        <div><label>Address</label><input name="Address" placeholder="123 Rue, Ville, QC"></div>
+        <div><label>Logo URL</label><input name="Logo URL" placeholder="https://...png"></div>
       </div>
-
-      <div><label>Description</label><textarea name="description" rows="6" required></textarea></div>
-
       <div class="grid grid-2">
-        <div><label>Courriel</label><input type="email" name="courriel" required></div>
-        <div><label>Téléphone</label><input name="telephone"></div>
+        <div><label>Min Salary</label><input name="Min Salary" type="number" step="0.01"></div>
+        <div><label>Max Salary</label><input name="Max Salary" type="number" step="0.01"></div>
       </div>
-
       <div class="grid grid-2">
-        <div><label>URL pour postuler</label><input name="apply_url" placeholder="https://..."></div>
-        <div><label>Logo (URL)</label><input name="logo_url" placeholder="https://...png"></div>
+        <div><label>email (public)</label><input type="email" name="email"></div>
+        <div><label>private email (reçu + gestion)</label><input type="email" name="private email" required></div>
       </div>
-
-      <div><label>Adresse (pour la carte)</label><input name="adresse" placeholder="123 Rue, Ville, QC"></div>
-      <div class="grid grid-2">
-        <div><label>Latitude</label><input name="lat" placeholder="45.5"></div>
-        <div><label>Longitude</label><input name="lng" placeholder="-73.56"></div>
-      </div>
-
-      <input type="hidden" name="session_id" id="session_id">
-      <button class="btn" id="submitBtn" type="submit">Publier l’annonce</button>
+      <input type="hidden" name="allow_geocode" value="1">
+      <button class="btn" type="submit">Continuer au paiement</button>
     </form>
-    <p id="ok" class="notice" style="display:none">Merci ! Votre annonce est en ligne 🎉</p>
   </div>
 </div>
 
 <script>
-  // 1) RENSEIGNE ICI LES 2 URLS :
-  const STRIPE_CHECKOUT_LINK = 'https://buy.stripe.com/test_dRm14o70m5ifatWeOYbo400'; // ← ton Checkout Link
-  const FORM_POST_URL = 'https://script.google.com/macros/s/AKfycbyZ83G0oNxU378WuZbx7HLFDguJcCf6TOFCgXqOvS7sdLVYrWeP6ueu1Tja_CqZLfdz/exec'; // ← URL "…/exec" de l’Apps Script
+  const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
 
-  // UI
-  document.getElementById('payLink').href = STRIPE_CHECKOUT_LINK;
-
-  // 2) Si Stripe a redirigé avec ?session_id=...
-  const params = new URLSearchParams(location.search);
-  const sid = params.get('session_id');
-  if (sid) {
-    document.getElementById('pay').style.display = 'none';
-    document.getElementById('formCard').style.display = 'block';
-    document.getElementById('session_id').value = sid;
-  }
-
-  // 3) Soumission (FormData, pas de Content-Type -> évite pré-requête CORS)
-  document.getElementById('jobForm')?.addEventListener('submit', async (e)=>{
+  document.getElementById('jobForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
     const fd = new FormData(e.target);
-    try{
-      const res = await fetch(FORM_POST_URL, { method:'POST', body: fd, cache:'no-store' });
-      // même si la réponse n'a pas d'entête CORS, l'écriture côté serveur aura eu lieu
-      if (res.ok) {
-        document.getElementById('ok').style.display='block';
-        e.target.reset();
-      } else {
-        alert('Une erreur est survenue. Vérifie que le paiement est validé.');
-      }
-    }catch(err){
-      alert('Erreur réseau: ' + err);
-    }finally{
-      btn.disabled = false;
+    fd.append('action','create_session');
+    const res = await fetch(API, { method:'POST', body:fd, cache:'no-store' });
+    const j = await res.json();
+    if (j.ok && j.url) {
+      location.href = j.url; // go to Stripe Checkout
+    } else {
+      alert('Erreur: ' + (j.error||'création paiement'));
     }
   });
 </script>
