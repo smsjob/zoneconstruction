@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Merci — ZoneConstruction.ca</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:720px;margin:0 auto;padding:22px}
+    .card{border:1px solid #eee;border-radius:14px;padding:18px;background:#fff}
+    a.btn{display:inline-block;background:#f9a533;color:#111;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Merci pour votre paiement</h1>
+  <div id="box" class="card">Publication en cours…</div>
+</div>
+
+<script>
+  const API = 'https://script.google.com/macros/s/YOUR_EXEC_ID/exec';
+  const sid = new URLSearchParams(location.search).get('session_id');
+  (async ()=>{
+    if (!sid){ document.getElementById('box').textContent='Session de paiement introuvable.'; return; }
+    const fd = new FormData(); fd.append('action','finalize'); fd.append('session_id', sid);
+    const j = await (await fetch(API,{method:'POST', body:fd})).json();
+    if (j.ok){
+      document.getElementById('box').innerHTML = `
+        <p>Votre annonce est publiée 🎉</p>
+        ${j.manage_url ? `<p>Gérez-la ici : <a class="btn" href="${j.manage_url}">Modifier / Annuler / Supprimer</a></p>` : ''}
+        <p><a href="emplois.html">Voir les offres</a></p>
+      `;
+    } else {
+      document.getElementById('box').textContent = 'Erreur: ' + (j.error||'finalisation');
+    }
+  })();
+</script>
+</body>
+</html>
