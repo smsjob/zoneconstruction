@@ -13,12 +13,12 @@
     nav a.active{border-bottom:3px solid #111}
     .wrap{max-width:900px;margin:0 auto;padding:20px}
     .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff;margin:12px 0}
-    label{font-weight:700} input,textarea,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
-    .grid{display:grid;gap:16px} .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    label{font-weight:700}
+    input,textarea,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer}
     .notice{background:#fff3cd;border:1px solid #ffe69c;padding:10px;border-radius:8px;margin:8px 0}
-    .chips{display:flex;flex-wrap:wrap;gap:10px}
-    .chip{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
     .req:after{content:" *";color:#b00020}
   </style>
 </head>
@@ -40,8 +40,8 @@
       <!-- Métier & Niveau -->
       <div class="grid grid-2">
         <div>
-          <label class="req" for="metier">Métier</label>
-          <select id="metier" name="metier" required>
+          <label class="req" for="jobCategory">Métier</label>
+          <select id="jobCategory" name="Job Category" required>
             <option value="" disabled selected>— Sélectionner —</option>
             <option>Arpenteur/Arpenteuse</option>
             <option>Boutefeu-foreur/Boutefeu-foreuse</option>
@@ -77,10 +77,9 @@
             <option>Tuyauteur/Tuyauteuse</option>
           </select>
         </div>
-
         <div>
-          <label class="req" for="niveau">Niveau</label>
-          <select id="niveau" name="niveau" required>
+          <label class="req" for="qualifications">Niveau</label>
+          <select id="qualifications" name="qualifications" required>
             <option value="" disabled selected>— Sélectionner —</option>
             <option>Compagnon</option>
             <option>Apprenti</option>
@@ -92,8 +91,8 @@
       <!-- Région & Secteur -->
       <div class="grid grid-2">
         <div>
-          <label class="req" for="region">Région</label>
-          <select id="region" name="region" required>
+          <label class="req" for="regionQc">Région</label>
+          <select id="regionQc" name="Region" required>
             <option value="" disabled selected>— Sélectionner —</option>
             <option value="01">01 Îles-de-la-Madeleine</option>
             <option value="02">02 Bas-Saint-Laurent–Gaspésie</option>
@@ -109,10 +108,9 @@
             <option value="14">14 Nunavik</option>
           </select>
         </div>
-
         <div>
           <label class="req" for="secteur">Secteur</label>
-          <select id="secteur" name="secteur" required>
+          <select id="secteur" name="Secteur" required>
             <option value="" disabled selected>— Sélectionner —</option>
             <option>Génie Civil et Voirie</option>
             <option>Industriel</option>
@@ -122,36 +120,59 @@
         </div>
       </div>
 
-      <!-- Horaire (multi-choix) -->
+      <!-- Horaire (1 seule option) -->
       <div>
-        <label class="req">Horaire (vous pouvez cocher plusieurs)</label>
-        <div class="chips">
-          <label class="chip"><input type="checkbox" name="horaire" value="Temps-Plein"> Temps-Plein</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Temps-Partiel"> Temps-Partiel</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Contractuel"> Contractuel</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Rotation Fly-in Fly-out"> Rotation Fly-in Fly-out</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Horaire varié"> Horaire varié</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Travail à distance"> Travail à distance</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Indépendant"> Indépendant</label>
-          <label class="chip"><input type="checkbox" name="horaire" value="Autre arrangement"> Autre arrangement</label>
-        </div>
+        <label class="req" for="employmentType">Horaire</label>
+        <select id="employmentType" name="Employment Type" required>
+          <option value="" disabled selected>— Sélectionner —</option>
+          <option>Temps-Plein</option>
+          <option>Temps-Partiel</option>
+          <option>Contractuel</option>
+          <option>Rotation Fly-in Fly-out</option>
+          <option>Horaire varié</option>
+          <option>Travail à distance</option>
+          <option>Indépendant</option>
+          <option>Autre arrangement</option>
+        </select>
       </div>
 
       <!-- Description -->
       <div>
-        <label class="req" for="description">Description</label>
-        <textarea id="description" name="description" rows="6" required placeholder="Responsabilités, exigences, salaire, avantages, conditions…"></textarea>
+        <label class="req" for="jobDesc">Description</label>
+        <textarea id="jobDesc" name="Job Description" rows="6" required placeholder="Responsabilités, exigences, salaire, avantages, conditions…"></textarea>
       </div>
 
-      <!-- Adresse complète -->
+      <!-- Adresse (champs séparés obligatoires) -->
+      <div class="grid grid-2">
+        <div>
+          <label class="req" for="street">No et rue</label>
+          <input id="street" name="Street Address" required placeholder="123 Rue Exemple">
+        </div>
+        <div>
+          <label class="req" for="city">Ville</label>
+          <input id="city" name="City" required placeholder="Montréal">
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div>
+          <label class="req" for="prov">Province (code)</label>
+          <input id="prov" name="addressRegion" required placeholder="QC">
+        </div>
+        <div>
+          <label class="req" for="postal">Code postal</label>
+          <input id="postal" name="Postal Code" required placeholder="H2X 1Y4" pattern="[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d" title="Format A1A 1A1">
+        </div>
+      </div>
       <div>
-        <label class="req" for="adresse_complete">Adresse complète</label>
-        <input id="adresse_complete" name="adresse_complete" placeholder="N°, rue, ville, code postal (ou ‘Télétravail’)" required>
+        <label class="req" for="country">Pays</label>
+        <input id="country" name="Country" required value="Canada" placeholder="Canada">
       </div>
 
-      <!-- Conservé : champs techniques existants -->
-      <input type="hidden" name="allow_geocode" value="1">
+      <!-- Sera rempli automatiquement avant l’envoi (concat de l’adresse) -->
+      <input type="hidden" name="Address" id="fullAddress">
 
+      <!-- Conservé : champ technique + flow paiement -->
+      <input type="hidden" name="allow_geocode" value="1">
       <button class="btn" type="submit">Continuer au paiement</button>
     </form>
   </div>
@@ -160,30 +181,34 @@
 <script>
   const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
 
+  function buildFullAddress(){
+    const street = (document.getElementById('street').value || '').trim();
+    const city   = (document.getElementById('city').value || '').trim();
+    const prov   = (document.getElementById('prov').value || '').trim();
+    const postal = (document.getElementById('postal').value || '').trim();
+    const country= (document.getElementById('country').value || '').trim();
+    const parts = [street, city, prov, postal, country].filter(Boolean);
+    document.getElementById('fullAddress').value = parts.join(', ');
+  }
+
   document.getElementById('jobForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
 
-    // Validation minimale côté client (évite paiements vides)
-    const reqIds = ['metier','niveau','region','secteur','description','adresse_complete'];
-    for (const id of reqIds){
+    // Validation simple avant paiement
+    const requiredIds = ['jobCategory','qualifications','regionQc','secteur','employmentType','jobDesc','street','city','prov','postal','country'];
+    for (const id of requiredIds){
       const el = document.getElementById(id);
-      if (el && !el.value.trim()){
-        alert('Veuillez remplir tous les champs requis.');
-        el.focus();
+      if (!el || !el.value || !el.value.trim()){
+        alert('Veuillez remplir tous les champs requis (*)');
+        el && el.focus();
         return;
       }
     }
-    // Au moins une case Horaire cochée ?
-    if (![...document.querySelectorAll('input[name="horaire"]:checked')].length){
-      alert('Veuillez sélectionner au moins une option pour l’horaire.');
-      return;
-    }
+
+    // Compose l'adresse complète -> "Address"
+    buildFullAddress();
 
     const fd = new FormData(e.target);
-    // Ajoute la liste horaire comme chaîne jointe (utile côté Apps Script)
-    const horaires = [...document.querySelectorAll('input[name="horaire"]:checked')].map(c=>c.value);
-    fd.append('horaire_list', horaires.join(', '));
-
     fd.append('action','create_session');
 
     try{
@@ -192,7 +217,7 @@
       if (j.ok && j.url) {
         location.href = j.url; // Stripe Checkout
       } else {
-        alert('Erreur: ' + (j.error||'création paiement'));
+        alert('Erreur: ' + (j.error || 'création paiement'));
       }
     }catch(err){
       alert('Erreur réseau: ' + err.message);
@@ -201,4 +226,5 @@
 </script>
 </body>
 </html>
+
 
