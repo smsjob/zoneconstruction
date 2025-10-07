@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Emplois — ZoneConstruction.ca</title>
 
+  <!-- Content Security Policy: READ-ONLY page -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: https:; script-src 'self' https://cdn.jsdelivr.net https://cdn.jsdelivr.net/npm/ol; style-src 'self' 'unsafe-inline' https:; connect-src 'self' https://script.google.com; frame-ancestors 'none'; base-uri 'self'">
+
   <!-- OpenLayers -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/dist/ol.css">
   <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
@@ -144,7 +148,9 @@
 </div>
 
 <script>
-  // ====== 1) URLS (garde les tiens) ======
+  <!-- READ-ONLY PAGE: ne pas ajouter de POST ou d'API d’écriture ici -->
+
+  // ====== 1) URLS (lecture seule) ======
   const mapJsonUrl = 'https://script.google.com/macros/s/AKfycbzfEPL-RwaT_mBSeI7RGQrWZ1OY14ip13r-AonSrpB6puAjyEg3wSGWhN9lct0fHZB2iQ/exec?view=map';
   const googleJobsJsonUrl = 'https://script.google.com/macros/s/AKfycbzfEPL-RwaT_mBSeI7RGQrWZ1OY14ip13r-AonSrpB6puAjyEg3wSGWhN9lct0fHZB2iQ/exec';
 
@@ -408,4 +414,3 @@
 
 </body>
 </html>
-
