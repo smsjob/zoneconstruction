@@ -11,9 +11,22 @@
     nav a{margin-right:18px;text-decoration:none;color:#111}
     nav a.active{border-bottom:3px solid #111}
     .hero{display:grid;place-items:center;min-height:55vh;background:#111;color:#fff;text-align:center;padding:40px 16px}
-    .btn{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:#f9a533;color:#111;font-weight:700;text-decoration:none;transition:background 0.2s}
-    .btn:hover{background:#ffb84d}
     .wrap{max-width:960px;margin:0 auto;padding:16px 20px}
+    .btn{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:#f9a533;color:#111;font-weight:700;text-decoration:none;transition:background .2s}
+    .btn:hover{background:#ffb84d}
+    /* Écriteau */
+    .placard{
+      display:inline-block;
+      background:#000;          /* fond noir */
+      color:#f9a533;            /* texte orange */
+      border:2px solid #f9a533; /* liseré orange */
+      border-radius:12px;
+      padding:6px 12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      margin:12px 0 8px;
+      text-transform:uppercase;
+    }
     footer{border-top:1px solid #ddd;margin-top:40px;padding:20px;text-align:center;font-size:0.9rem}
   </style>
 </head>
@@ -33,14 +46,21 @@
     <section class="hero">
       <div class="wrap" style="text-align:center">
         <h1>Emplois en construction au Québec</h1>
-        <a class="btn" href="emplois.html">Voir les offres</a>
-        <a class="btn" href="annoncer.html" style="margin-left:10px;">Publier une offre</a>
+
+        <!-- ÉCRITEAU ORANGE SUR NOIR -->
+        <div class="placard" aria-label="Zone Construction">Zone Construction</div>
+
+        <!-- Boutons -->
+        <div style="margin-top:6px">
+          <a class="btn" href="emplois.html">Voir les offres</a>
+          <a class="btn" href="annoncer.html" style="margin-left:10px;">Publier une offre</a>
+        </div>
       </div>
     </section>
 
     <div class="wrap">
       <p>Bienvenue sur <strong>ZoneConstruction.ca</strong> — la plateforme dédiée aux emplois dans le secteur de la construction au Québec.</p>
-      <p>Employeurs, publiez vos offres d’emploi en quelques minutes grâce à un formulaire simple et un paiement sécurisé.  
+      <p>Employeurs, publiez vos offres d’emploi en quelques minutes grâce à un formulaire simple et un paiement sécurisé.
       Candidats, trouvez les postes selon votre métier, région et niveau.</p>
     </div>
   </main>
