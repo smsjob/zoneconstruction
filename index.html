@@ -14,17 +14,17 @@
     .wrap{max-width:960px;margin:0 auto;padding:16px 20px}
     .btn{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:#f9a533;color:#111;font-weight:700;text-decoration:none;transition:background .2s}
     .btn:hover{background:#ffb84d}
-    /* Écriteau */
-    .placard{
-      display:inline-block;
-      background:#000;          /* fond noir */
-      color:#f9a533;            /* texte orange */
-      border:2px solid #f9a533; /* liseré orange */
+    .placard-large{
+      display:block;
+      background:#000;
+      color:#f9a533;
+      border:2px solid #f9a533;
       border-radius:12px;
-      padding:6px 12px;
-      font-weight:800;
-      letter-spacing:.08em;
-      margin:12px 0 8px;
+      padding:16px 24px;
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:0.1em;
+      margin-bottom:24px;
       text-transform:uppercase;
     }
     footer{border-top:1px solid #ddd;margin-top:40px;padding:20px;text-align:center;font-size:0.9rem}
@@ -45,13 +45,12 @@
   <main>
     <section class="hero">
       <div class="wrap" style="text-align:center">
+        <!-- ÉCRITEAU GÉANT AU-DESUS -->
+        <div class="placard-large" aria-label="Zone Construction">Zone Construction</div>
+
         <h1>Emplois en construction au Québec</h1>
 
-        <!-- ÉCRITEAU ORANGE SUR NOIR -->
-        <div class="placard" aria-label="Zone Construction">Zone Construction</div>
-
-        <!-- Boutons -->
-        <div style="margin-top:6px">
+        <div style="margin-top:20px">
           <a class="btn" href="emplois.html">Voir les offres</a>
           <a class="btn" href="annoncer.html" style="margin-left:10px;">Publier une offre</a>
         </div>
@@ -60,7 +59,7 @@
 
     <div class="wrap">
       <p>Bienvenue sur <strong>ZoneConstruction.ca</strong> — la plateforme dédiée aux emplois dans le secteur de la construction au Québec.</p>
-      <p>Employeurs, publiez vos offres d’emploi en quelques minutes grâce à un formulaire simple et un paiement sécurisé.
+      <p>Employeurs, publiez vos offres d’emploi en quelques minutes grâce à un formulaire simple et un paiement sécurisé.  
       Candidats, trouvez les postes selon votre métier, région et niveau.</p>
     </div>
   </main>
@@ -73,4 +72,5 @@
   </footer>
 </body>
 </html>
+
 
