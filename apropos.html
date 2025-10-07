@@ -18,7 +18,9 @@
     .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fafafa;margin:12px 0}
     .grid{display:grid;gap:16px}
     .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .pill{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0}
+    .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer}
+    address{font-style:normal;line-height:1.6}
+    footer{border-top:1px solid #ddd;margin-top:40px;padding:20px;text-align:center;font-size:0.9rem}
   </style>
 </head>
 <body>
@@ -27,65 +29,104 @@
     <a href="index.html">Accueil</a>
     <a href="emplois.html">Emplois</a>
     <a href="annoncer.html">Annoncer</a>
-    <a href="contact.html">Contact</a>
-    <a class="active" href="apropos.html">À Propos</a>
+    <a class="active" href="apropos.html">À propos</a>
   </nav>
 </header>
 
 <div class="wrap">
   <h1>À propos</h1>
 
+  <!-- NOUS CONTACTER EN HAUT -->
   <div class="card">
-    <h2 style="margin-top:0">Notre mission</h2>
-    <p><strong>ZoneConstruction.ca</strong> facilite le recrutement dans l’industrie de la construction au Québec : une plateforme simple, locale et optimisée SEO (Google Jobs) pour mettre en relation employeurs et candidats qualifiés.</p>
+    <h2 style="margin-top:0">Nous contacter</h2>
+    <p>Pour toute question, support ou publication, écrivez-nous :</p>
+    <p><a class="btn" href="mailto:info@zoneconstruction.ca">info@zoneconstruction.ca</a></p>
+    <address>
+      SMS Job Inc.<br>
+      4388 Rue Saint-Denis, Suite 200-717<br>
+      Montréal (QC) H2J&nbsp;2L1 — Canada
+    </address>
   </div>
 
+  <!-- MISSION -->
+  <div class="card">
+    <h2 style="margin-top:0">Notre mission</h2>
+    <p><strong>ZoneConstruction.ca</strong> facilite le recrutement dans l’industrie de la construction au Québec : une plateforme simple, locale et optimisée pour <em>Google Jobs</em> afin de connecter employeurs et candidats qualifiés.</p>
+  </div>
+
+  <!-- OFFRE -->
   <div class="card">
     <h2 style="margin-top:0">Ce que nous offrons</h2>
     <div class="grid grid-2">
       <div>
         <h3 style="margin:8px 0">Pour les employeurs</h3>
         <ul>
-          <li>Publication d’offres en 5 minutes (paiement sécurisé Stripe)</li>
-          <li>Diffusion sur la carte interactive et filtrage par métier/région/secteur</li>
-          <li>Schéma <code>JobPosting</code> pour la visibilité Google Jobs</li>
+          <li>Publication d’offres en quelques minutes (paiement sécurisé Stripe)</li>
+          <li>Diffusion avec filtres par métier, région et secteur</li>
+          <li>Balises <code>JobPosting</code> pour la visibilité Google Jobs</li>
         </ul>
       </div>
       <div>
         <h3 style="margin:8px 0">Pour les candidats</h3>
         <ul>
-          <li>Recherche par proximité et par filtres</li>
-          <li>Infos claires (salaire, lieu, type d’emploi)</li>
+          <li>Recherche par proximité et critères</li>
+          <li>Infos claires (salaire, lieu, horaire)</li>
           <li>Lien direct pour postuler</li>
         </ul>
       </div>
     </div>
   </div>
 
+  <!-- PROCESSUS -->
   <div class="card">
     <h2 style="margin-top:0">Processus d’annonce</h2>
     <ol>
-      <li>Paiement sécurisé sur la page <a href="annoncer.html">Annoncer</a>.</li>
-      <li>Remplissage du formulaire avec les détails du poste.</li>
-      <li>Mise en ligne immédiate et visibilité sur la carte / Google Jobs.</li>
+      <li>Rendez-vous sur <a href="annoncer.html">Annoncer</a> et complétez le paiement (Stripe).</li>
+      <li>Remplissez le formulaire (titre, description, région, secteur, salaire, etc.).</li>
+      <li>Votre offre est mise en ligne et optimisée pour Google Jobs.</li>
     </ol>
   </div>
 </div>
 
-<!-- JSON-LD AboutPage (SEO) -->
+<footer>
+  <p>&copy; 2025 ZoneConstruction.ca |
+    <a href="politique.html">Politique de confidentialité</a> |
+    <a href="conditions.html">Conditions d’utilisation</a>
+  </p>
+</footer>
+
+<!-- JSON-LD (AboutPage + Organization) -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "name": "À propos — ZoneConstruction.ca",
-  "url": "https://YOUR_USER.github.io/zoneconstruction/apropos.html",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "ZoneConstruction.ca",
-    "url": "https://YOUR_USER.github.io/zoneconstruction/"
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "À propos — ZoneConstruction.ca",
+    "url": "https://YOUR_DOMAIN/apropos.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "ZoneConstruction.ca",
+      "url": "https://YOUR_DOMAIN/"
+    },
+    "description": "Plateforme d’emplois pour l’industrie de la construction au Québec."
   },
-  "description": "Plateforme d’emplois pour l’industrie de la construction au Québec."
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ZoneConstruction.ca",
+    "url": "https://YOUR_DOMAIN/",
+    "email": "info@zoneconstruction.ca",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "4388 Rue Saint-Denis, Suite 200-717",
+      "addressLocality": "Montréal",
+      "addressRegion": "QC",
+      "postalCode": "H2J 2L1",
+      "addressCountry": "CA"
+    }
+  }
+]
 </script>
 </body>
 </html>
+
