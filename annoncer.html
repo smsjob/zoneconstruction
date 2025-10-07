@@ -4,6 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annoncer — ZoneConstruction.ca</title>
+  <meta name="description" content="Publiez une offre d’emploi en construction au Québec. Paiement sécurisé via Stripe, publication automatisée.">
+
+  <!-- CSP: page WRITE-ONLY. Autorise fetch vers Apps Script uniquement -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline' https:; connect-src 'self' https://script.google.com; frame-ancestors 'none'; base-uri 'self'">
+
   <style>
     :root{--line:#eaeaea;--brand:#f9a533;--brand-2:#ffb84d;--text:#161616;--muted:#666;--bg:#fff}
     *{box-sizing:border-box}
@@ -45,6 +51,7 @@
     /* Buttons */
     .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer;transition:.15s background}
     .btn:hover{background:var(--brand-2)}
+    .btn[disabled]{opacity:.6;cursor:default}
 
     /* Footer */
     footer{border-top:1px solid #ddd;margin-top:40px;padding:20px;text-align:center;font-size:0.9rem}
@@ -67,10 +74,10 @@
 
   <div class="wrap">
     <h1>Publier une offre</h1>
-    <p class="notice">Remplissez le formulaire puis cliquez “Continuer au paiement”.</p>
+    <p class="notice">Remplissez le formulaire puis cliquez « Continuer au paiement ».</p>
 
     <div class="card">
-      <form id="jobForm" class="grid">
+      <form id="jobForm" class="grid" novalidate>
         <!-- SECTION: Catégorie & CCQ -->
         <div class="section">
           <h2>🧭 Catégorie & CCQ</h2>
@@ -225,7 +232,7 @@
           <div class="grid grid-2">
             <div>
               <label class="req" for="postal">Code postal</label>
-              <input id="postal" name="Postal Code" required placeholder="H2X 1Y4" pattern="[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d" title="Format A1A 1A1" />
+              <input id="postal" name="Postal Code" required placeholder="H2X 1Y4" pattern="[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d" title="Format A1A 1A1" />
             </div>
             <div>
               <label class="req" for="prov">Province</label>
@@ -284,9 +291,12 @@
           <div class="muted" style="margin-top:6px">Vous pouvez choisir plusieurs options.</div>
         </div>
 
+        <!-- Honeypot anti-bot (reste vide) -->
+        <input type="text" name="website_hp" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+
         <!-- TECH -->
         <input type="hidden" name="allow_geocode" value="1">
-        <button class="btn" type="submit">Continuer au paiement</button>
+        <button class="btn" id="submitBtn" type="submit">Continuer au paiement</button>
       </form>
     </div>
   </div>
@@ -299,6 +309,7 @@
   </footer>
 
   <script>
+    // WRITE endpoint (Apps Script)
     const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
 
     // Helpers to show/hide blocks
@@ -352,7 +363,10 @@
     });
 
     // Submit
-    document.getElementById('jobForm').addEventListener('submit', async (e)=>{
+    const form = document.getElementById('jobForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
 
       // Basic required guard
@@ -365,24 +379,36 @@
         }
       }
 
+      // Honeypot
+      const hp = form.querySelector('input[name="website_hp"]');
+      if (hp && hp.value) { alert('Requête bloquée.'); return; }
+
       // Combine apply methods
       const methods = [...document.querySelectorAll('input[name="apply_methods"]:checked')].map(i=>i.value);
-      const fd = new FormData(e.target);
-      fd.append('Apply Methods', methods.join(', '));
 
-      // Stripe session
-      fd.append('action','create_session');
+      const fd = new FormData(form);
+      fd.append('Apply Methods', methods.join(', '));
+      fd.append('action','create_session'); // action côté serveur (le prix est imposé côté Apps Script)
+
+      // Sauvegarde locale pour merci.html (finalisation après paiement)
+      const plain = Object.fromEntries(fd.entries());
+      sessionStorage.setItem('jobForm', JSON.stringify(plain));
+
+      submitBtn.disabled = true;
 
       try{
         const res = await fetch(API, { method:'POST', body:fd, cache:'no-store' });
+        if (!res.ok) throw new Error('API indisponible');
         const j = await res.json();
         if(j.ok && j.url){
-          location.href = j.url; // Stripe Checkout
+          location.href = j.url; // → Stripe Checkout
         }else{
           alert('Erreur: ' + (j.error || 'création paiement'));
+          submitBtn.disabled = false;
         }
       }catch(err){
         alert('Erreur réseau: ' + err.message);
+        submitBtn.disabled = false;
       }
     });
   </script>
