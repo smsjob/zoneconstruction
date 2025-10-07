@@ -6,9 +6,15 @@
   <title>Annoncer — ZoneConstruction.ca</title>
   <meta name="description" content="Publiez une offre d’emploi en construction au Québec. Paiement sécurisé via Stripe, publication automatisée.">
 
-  <!-- CSP: page WRITE-ONLY. Autorise fetch vers Apps Script uniquement -->
+  <!-- CSP: WRITE-ONLY page (allows inline script so the radio logic works) -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline' https:; connect-src 'self' https://script.google.com; frame-ancestors 'none'; base-uri 'self'">
+        content="default-src 'self';
+                 img-src 'self' data: https:;
+                 script-src 'self' 'unsafe-inline';
+                 style-src 'self' 'unsafe-inline' https:;
+                 connect-src 'self' https://script.google.com;
+                 frame-ancestors 'none';
+                 base-uri 'self'">
 
   <style>
     :root{--line:#eaeaea;--brand:#f9a533;--brand-2:#ffb84d;--text:#161616;--muted:#666;--bg:#fff}
@@ -74,7 +80,7 @@
 
   <div class="wrap">
     <h1>Publier une offre</h1>
-    <p class="notice">Remplissez le formulaire puis cliquez « Continuer au paiement ».</p>
+    <p class="notice">Remplissez le formulaire puis cliquez « Continuer au paiement ». Page <strong>WRITE-ONLY</strong> : toutes les écritures passent par ici.</p>
 
     <div class="card">
       <form id="jobForm" class="grid" novalidate>
@@ -96,8 +102,9 @@
             <div>
               <label class="req">Carte de compétence CCQ requise ?</label>
               <div style="display:flex;gap:16px;margin-top:6px">
-                <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
-                <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
+                <!-- only one radio in the group needs required; Non is default -->
+                <label><input type="radio" name="ccq_required" value="OUI"> Oui</label>
+                <label><input type="radio" name="ccq_required" value="NON" required checked> Non</label>
               </div>
             </div>
           </div>
@@ -309,7 +316,7 @@
   </footer>
 
   <script>
-    // WRITE endpoint (Apps Script)
+    // WRITE endpoint (Apps Script) — replace if you rotate the deployment
     const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
 
     // Helpers to show/hide blocks
@@ -337,7 +344,9 @@
         else { el.removeAttribute('required'); el.selectedIndex = 0; }
       });
     }
+
     radiosCcq.forEach(r => r.addEventListener('change', updateCcqUI));
+    document.addEventListener('DOMContentLoaded', updateCcqUI); // init once on load
 
     // Logo preview
     const logoInput = document.getElementById('logo');
@@ -388,9 +397,9 @@
 
       const fd = new FormData(form);
       fd.append('Apply Methods', methods.join(', '));
-      fd.append('action','create_session'); // action côté serveur (le prix est imposé côté Apps Script)
+      fd.append('action','create_session'); // server decides the price
 
-      // Sauvegarde locale pour merci.html (finalisation après paiement)
+      // Save for merci.html (finalization after payment)
       const plain = Object.fromEntries(fd.entries());
       sessionStorage.setItem('jobForm', JSON.stringify(plain));
 
@@ -414,3 +423,4 @@
   </script>
 </body>
 </html>
+
