@@ -9,6 +9,7 @@
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     header{border-bottom:1px solid #eee;background:#fff}
     nav a{margin-right:18px;text-decoration:none;color:#111}
+    nav a.active{border-bottom:3px solid #111}
     .hero{display:grid;place-items:center;min-height:55vh;background:#111;color:#fff;text-align:center;padding:40px 16px}
     .btn{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:#f9a533;color:#111;font-weight:700;text-decoration:none}
     .wrap{max-width:960px;margin:0 auto;padding:16px 20px}
@@ -19,8 +20,10 @@
   <header>
     <div class="wrap">
       <nav>
-        <a href="index.html">Accueil</a>
+        <a class="active" href="index.html">Accueil</a>
         <a href="emplois.html">Emplois</a>
+        <a href="annoncer.html">Annoncer</a>
+        <a href="apropos.html">À propos</a>
       </nav>
     </div>
   </header>
@@ -30,11 +33,12 @@
       <div class="wrap" style="text-align:center">
         <h1>Emplois en construction au Québec</h1>
         <a class="btn" href="emplois.html">Voir les offres</a>
+        <a class="btn" href="annoncer.html" style="margin-left:10px;background:#fff;color:#111;border:2px solid #f9a533;">Publier une offre</a>
       </div>
     </section>
 
     <div class="wrap">
-      <p>Bienvenue sur ZoneConstruction.ca.</p>
+      <p>Bienvenue sur <strong>ZoneConstruction.ca</strong>, le site dédié aux emplois du secteur de la construction au Québec. Trouvez des opportunités ou publiez vos offres rapidement.</p>
     </div>
   </main>
 
@@ -46,3 +50,4 @@
   </footer>
 </body>
 </html>
+
