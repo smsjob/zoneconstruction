@@ -1,230 +1,179 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Annoncer — ZoneConstruction.ca</title>
-  <style>
-    :root{--line:#eaeaea;--brand:#f9a533;--text:#161616}
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    header{border-bottom:1px solid var(--line)}
-    nav{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;gap:22px}
-    nav a{text-decoration:none;color:#111}
-    nav a.active{border-bottom:3px solid #111}
-    .wrap{max-width:900px;margin:0 auto;padding:20px}
-    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff;margin:12px 0}
-    label{font-weight:700}
-    input,textarea,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px}
-    .grid{display:grid;gap:16px}
-    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer}
-    .notice{background:#fff3cd;border:1px solid #ffe69c;padding:10px;border-radius:8px;margin:8px 0}
-    .req:after{content:" *";color:#b00020}
-  </style>
-</head>
-<body>
-<header><nav>
-  <a href="index.html">Accueil</a>
-  <a href="emplois.html">Emplois</a>
-  <a class="active" href="annoncer.html">Annoncer</a>
-  <a href="contact.html">Contact</a>
-  <a href="apropos.html">À Propos</a>
-</nav></header>
-
-<div class="wrap">
-  <h1>Publier une offre</h1>
-  <p class="notice">Remplissez le formulaire puis cliquez “Continuer au paiement”.</p>
-
-  <div class="card">
-    <form id="jobForm" class="grid">
-      <!-- Métier & Niveau -->
-      <div class="grid grid-2">
-        <div>
-          <label class="req" for="jobCategory">Métier</label>
-          <select id="jobCategory" name="Job Category" required>
-            <option value="" disabled selected>— Sélectionner —</option>
-            <option>Arpenteur/Arpenteuse</option>
-            <option>Boutefeu-foreur/Boutefeu-foreuse</option>
-            <option>Briqueteur-maçon/Briqueteuse-maçonne</option>
-            <option>Calorifugeur/Calorifugeuse</option>
-            <option>Carreleur/Carreleuse</option>
-            <option>Charpentier-menuisier/Charpentière-menuisière</option>
-            <option>Chaudronnier/Chaudronnière</option>
-            <option>Cimentier-applicateur/Cimentière-applicatrice</option>
-            <option>Couvreur/Couvreuse</option>
-            <option>Électricien/Électricienne</option>
-            <option>Électricien/Électricienne en installation de systèmes de sécurité</option>
-            <option>Ferblantier/Ferblantière</option>
-            <option>Ferrailleur/Ferrailleuse</option>
-            <option>Frigoriste</option>
-            <option>Grutier/Grutière</option>
-            <option>Mécanicien/Mécanicienne d'ascenseur</option>
-            <option>Mécanicien/Mécanicienne industriel(le)de chantier</option>
-            <option>Mécanicien/Mécanicienne de machines lourdes</option>
-            <option>Mécanicien/Mécanicienne en protection-incendie</option>
-            <option>Monteur-assembleur/Monteuse-assembleuse</option>
-            <option>Monteur-mécanicien (vitrier)/Monteuse-mécanicienne (vitrière)</option>
-            <option>Monteur/Monteuse de lignes</option>
-            <option>Opérateur/Opératrice d'équipement lourd</option>
-            <option>Opérateur/Opératrice de pelles mécaniques</option>
-            <option>Peintre</option>
-            <option>Plâtrier/Plâtrière</option>
-            <option>Poseur/Poseuse de revêtements souples</option>
-            <option>Poseur/Poseuse de systèmes intérieurs</option>
-            <option>Scaphandrier/Scaphandrière</option>
-            <option>Soudeur/Soudeuse</option>
-            <option>Soudeur/Soudeuse en tuyauterie (haute pression)</option>
-            <option>Tuyauteur/Tuyauteuse</option>
-          </select>
-        </div>
-        <div>
-          <label class="req" for="qualifications">Niveau</label>
-          <select id="qualifications" name="qualifications" required>
-            <option value="" disabled selected>— Sélectionner —</option>
-            <option>Compagnon</option>
-            <option>Apprenti</option>
-            <option>Occupation</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Région & Secteur -->
-      <div class="grid grid-2">
-        <div>
-          <label class="req" for="regionQc">Région</label>
-          <select id="regionQc" name="Region" required>
-            <option value="" disabled selected>— Sélectionner —</option>
-            <option value="01">01 Îles-de-la-Madeleine</option>
-            <option value="02">02 Bas-Saint-Laurent–Gaspésie</option>
-            <option value="03">03 Saguenay–Lac-Saint-Jean</option>
-            <option value="04">04 Québec</option>
-            <option value="06">06 Mauricie–Bois-Francs</option>
-            <option value="07">07 Estrie</option>
-            <option value="08">08 Grand Montréal</option>
-            <option value="09">09 Outaouais</option>
-            <option value="10">10 Abitibi-Témiscamingue</option>
-            <option value="11">11 Côte-Nord</option>
-            <option value="13">13 Baie-James</option>
-            <option value="14">14 Nunavik</option>
-          </select>
-        </div>
-        <div>
-          <label class="req" for="secteur">Secteur</label>
-          <select id="secteur" name="Secteur" required>
-            <option value="" disabled selected>— Sélectionner —</option>
-            <option>Génie Civil et Voirie</option>
-            <option>Industriel</option>
-            <option>Institutionnel et Commercial</option>
-            <option>Résidentiel</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Horaire (1 seule option) -->
-      <div>
-        <label class="req" for="employmentType">Horaire</label>
-        <select id="employmentType" name="Employment Type" required>
-          <option value="" disabled selected>— Sélectionner —</option>
-          <option>Temps-Plein</option>
-          <option>Temps-Partiel</option>
-          <option>Contractuel</option>
-          <option>Rotation Fly-in Fly-out</option>
-          <option>Horaire varié</option>
-          <option>Travail à distance</option>
-          <option>Indépendant</option>
-          <option>Autre arrangement</option>
-        </select>
-      </div>
-
-      <!-- Description -->
-      <div>
-        <label class="req" for="jobDesc">Description</label>
-        <textarea id="jobDesc" name="Job Description" rows="6" required placeholder="Responsabilités, exigences, salaire, avantages, conditions…"></textarea>
-      </div>
-
-      <!-- Adresse (champs séparés obligatoires) -->
-      <div class="grid grid-2">
-        <div>
-          <label class="req" for="street">No et rue</label>
-          <input id="street" name="Street Address" required placeholder="123 Rue Exemple">
-        </div>
-        <div>
-          <label class="req" for="city">Ville</label>
-          <input id="city" name="City" required placeholder="Montréal">
-        </div>
-      </div>
-      <div class="grid grid-2">
-        <div>
-          <label class="req" for="prov">Province (code)</label>
-          <input id="prov" name="addressRegion" required placeholder="QC">
-        </div>
-        <div>
-          <label class="req" for="postal">Code postal</label>
-          <input id="postal" name="Postal Code" required placeholder="H2X 1Y4" pattern="[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d" title="Format A1A 1A1">
-        </div>
-      </div>
-      <div>
-        <label class="req" for="country">Pays</label>
-        <input id="country" name="Country" required value="Canada" placeholder="Canada">
-      </div>
-
-      <!-- Sera rempli automatiquement avant l’envoi (concat de l’adresse) -->
-      <input type="hidden" name="Address" id="fullAddress">
-
-      <!-- Conservé : champ technique + flow paiement -->
-      <input type="hidden" name="allow_geocode" value="1">
-      <button class="btn" type="submit">Continuer au paiement</button>
-    </form>
+<form id="jobForm" class="grid">
+  <!-- 1. Catégorie -->
+  <div>
+    <label class="req" for="categorie">Catégorie</label>
+    <select id="categorie" name="Categorie" required>
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>Administration</option>
+      <option>Vente</option>
+      <option>Chantier</option>
+    </select>
   </div>
-</div>
 
-<script>
-  const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
+  <!-- 2. Carte de compétence CCQ -->
+  <div>
+    <label class="req">Est-ce que l'emploi a besoin d'une carte de compétence CCQ ?</label>
+    <div style="display:flex;gap:16px;margin-top:8px">
+      <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
+      <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
+    </div>
+  </div>
 
-  function buildFullAddress(){
-    const street = (document.getElementById('street').value || '').trim();
-    const city   = (document.getElementById('city').value || '').trim();
-    const prov   = (document.getElementById('prov').value || '').trim();
-    const postal = (document.getElementById('postal').value || '').trim();
-    const country= (document.getElementById('country').value || '').trim();
-    const parts = [street, city, prov, postal, country].filter(Boolean);
-    document.getElementById('fullAddress').value = parts.join(', ');
-  }
+  <!-- 3. Métier/Occupation (visible si CCQ=OUI) -->
+  <div id="wrapMetier" style="display:none;margin-top:12px">
+    <label class="req" for="metier">Métier / Occupation</label>
+    <select id="metier" name="Metier">
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>Arpenteur/Arpenteuse</option>
+      <option>Boutefeu-foreur/Boutefeu-foreuse</option>
+      <option>Briqueteur-maçon/Briqueteuse-maçonne</option>
+      <option>Calorifugeur/Calorifugeuse</option>
+      <option>Carreleur/Carreleuse</option>
+      <option>Charpentier-menuisier/Charpentière-menuisière</option>
+      <option>Chaudronnier/Chaudronnière</option>
+      <option>Cimentier-applicateur/Cimentière-applicatrice</option>
+      <option>Couvreur/Couvreuse</option>
+      <option>Électricien/Électricienne</option>
+      <option>Électricien/Électricienne en installation de systèmes de sécurité</option>
+      <option>Ferblantier/Ferblantière</option>
+      <option>Ferrailleur/Ferrailleuse</option>
+      <option>Frigoriste</option>
+      <option>Grutier/Grutière</option>
+      <option>Mécanicien/Mécanicienne d'ascenseur</option>
+      <option>Mécanicien/Mécanicienne industriel(le)de chantier</option>
+      <option>Mécanicien/Mécanicienne de machines lourdes</option>
+      <option>Mécanicien/Mécanicienne en protection-incendie</option>
+      <option>Monteur-assembleur/Monteuse-assembleuse</option>
+      <option>Monteur-mécanicien (vitrier)/Monteuse-mécanicienne (vitrière)</option>
+      <option>Monteur/Monteuse de lignes</option>
+      <option>Opérateur/Opératrice d'équipement lourd</option>
+      <option>Opérateur/Opératrice de pelles mécaniques</option>
+      <option>Peintre</option>
+      <option>Plâtrier/Plâtrière</option>
+      <option>Poseur/Poseuse de revêtements souples</option>
+      <option>Poseur/Poseuse de systèmes intérieurs</option>
+      <option>Scaphandrier/Scaphandrière</option>
+      <option>Soudeur/Soudeuse</option>
+      <option>Soudeur/Soudeuse en tuyauterie (haute pression)</option>
+      <option>Tuyauteur/Tuyauteuse</option>
+    </select>
+  </div>
 
-  document.getElementById('jobForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
+  <!-- 4. Niveau -->
+  <div id="wrapNiveau" style="display:none">
+    <label class="req" for="niveau">Niveau</label>
+    <select id="niveau" name="Niveau">
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>Compagnon</option>
+      <option>Apprenti</option>
+      <option>Occupation</option>
+    </select>
+  </div>
 
-    // Validation simple avant paiement
-    const requiredIds = ['jobCategory','qualifications','regionQc','secteur','employmentType','jobDesc','street','city','prov','postal','country'];
-    for (const id of requiredIds){
-      const el = document.getElementById(id);
-      if (!el || !el.value || !el.value.trim()){
-        alert('Veuillez remplir tous les champs requis (*)');
-        el && el.focus();
-        return;
-      }
-    }
+  <!-- 5. Secteur -->
+  <div id="wrapSecteur" style="display:none">
+    <label class="req" for="secteur">Secteur</label>
+    <select id="secteur" name="Secteur">
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>Génie Civil et Voirie</option>
+      <option>Industriel</option>
+      <option>Institutionnel et Commercial</option>
+      <option>Résidentiel</option>
+    </select>
+  </div>
 
-    // Compose l'adresse complète -> "Address"
-    buildFullAddress();
+  <!-- 6. Région -->
+  <div id="wrapRegion" style="display:none">
+    <label class="req" for="region">Région</label>
+    <select id="region" name="Region">
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>01 Îles-de-la-Madeleine</option>
+      <option>02 Bas-Saint-Laurent–Gaspésie</option>
+      <option>03 Saguenay–Lac-Saint-Jean</option>
+      <option>04 Québec</option>
+      <option>06 Mauricie–Bois-Francs</option>
+      <option>07 Estrie</option>
+      <option>08 Grand Montréal</option>
+      <option>09 Outaouais</option>
+      <option>10 Abitibi-Témiscamingue</option>
+      <option>11 Côte-Nord</option>
+      <option>13 Baie-James</option>
+      <option>14 Nunavik</option>
+    </select>
+  </div>
 
-    const fd = new FormData(e.target);
-    fd.append('action','create_session');
+  <!-- 7. Titre -->
+  <div>
+    <label class="req" for="titre">Titre de l'emploi</label>
+    <input id="titre" name="Job Title" required placeholder="Ex: Charpentier-menuisier / Adjoint administratif">
+  </div>
 
-    try{
-      const res = await fetch(API, { method:'POST', body:fd, cache:'no-store' });
-      const j = await res.json();
-      if (j.ok && j.url) {
-        location.href = j.url; // Stripe Checkout
-      } else {
-        alert('Erreur: ' + (j.error || 'création paiement'));
-      }
-    }catch(err){
-      alert('Erreur réseau: ' + err.message);
-    }
-  });
-</script>
-</body>
-</html>
+  <!-- 8. Description -->
+  <div>
+    <label class="req" for="description">Description</label>
+    <textarea id="description" name="Job Description" rows="6" required></textarea>
+  </div>
 
+  <!-- 9. Horaire -->
+  <div>
+    <label class="req" for="horaire">Horaire</label>
+    <select id="horaire" name="Employment Type" required>
+      <option value="" disabled selected>— Sélectionner —</option>
+      <option>Temps-Plein</option>
+      <option>Temps-Partiel</option>
+      <option>Contractuel</option>
+      <option>Rotation Fly-in Fly-out</option>
+      <option>Horaire varié</option>
+      <option>Travail à distance</option>
+      <option>Indépendant</option>
+      <option>Autre arrangement</option>
+    </select>
+  </div>
 
+  <!-- 10. Salaire -->
+  <div>
+    <label for="salaire">Salaire</label>
+    <input id="salaire" name="Salary Display" placeholder="ex: entre 35$ et 40$ de l'heure">
+  </div>
+
+  <!-- 11. Adresse -->
+  <div class="grid grid-2">
+    <div><label class="req">Numéro et rue</label><input name="Street Address" required></div>
+    <div><label class="req">Ville</label><input name="City" required></div>
+  </div>
+  <div class="grid grid-2">
+    <div><label class="req">Code postal</label><input name="Postal Code" required></div>
+    <div><label>Province</label><input name="addressRegion" value="QC"></div>
+  </div>
+  <div><label>Pays</label><input name="Country" value="Canada"></div>
+
+  <!-- 12. Entreprise -->
+  <div><label class="req">Nom de l'entreprise</label><input name="Company Name" required></div>
+
+  <!-- 13. Logo -->
+  <div><label>Logo de l'entreprise (URL ou upload)</label><input type="file" name="Logo File" accept="image/*"></div>
+
+  <!-- 14. Courriel -->
+  <div><label class="req">Courriel de communication</label><input type="email" name="email" required></div>
+
+  <!-- 15. Comment postuler -->
+  <div>
+    <label class="req">Comment postuler</label>
+    <div>
+      <label><input type="checkbox" name="apply_methods" value="Courriel"> Par courriel</label><br>
+      <label><input type="checkbox" name="apply_methods" value="En personne"> En personne</label><br>
+      <label><input type="checkbox" name="apply_methods" value="Téléphone/SMS"> Téléphone / SMS</label><br>
+      <label><input type="checkbox" name="apply_methods" value="Site Web"> Site Web</label>
+    </div>
+  </div>
+
+  <!-- 16. Téléphone -->
+  <div><label>Téléphone</label><input name="Phone" placeholder="ex: 514-123-4567"></div>
+
+  <!-- 17. Lien vers le site Web -->
+  <div><label>Site Web</label><input name="Company Website" placeholder="https://..."></div>
+
+  <!-- Stripe flow -->
+  <input type="hidden" name="allow_geocode" value="1">
+  <button class="btn" type="submit">Continuer au paiement</button>
+</form>
