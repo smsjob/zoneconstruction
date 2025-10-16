@@ -92,7 +92,64 @@
   border-color: var(--brand);
   box-shadow: 0 0 0 3px rgba(249,165,51,.15);
 }
+/* ===== Enhanced Form Layout ===== */
 
+/* Each major section is more distinct */
+.section {
+  margin: 40px 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* Section headings cleaner */
+.section h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 2px solid var(--brand);
+  padding-bottom: 6px;
+}
+
+/* Comment postuler simplified checkboxes */
+.apply-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.apply-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.apply-options input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand);
+}
+
+/* Make spacing consistent at bottom of muted text */
+.section .muted {
+  margin-top: 10px;
+  display: block;
+}
+
+/* Slightly smaller padding on mobile */
+@media (max-width: 640px) {
+  .section {
+    padding: 16px;
+  }
+}
   </style>
 </head>
 <body>
@@ -274,7 +331,7 @@
   <fieldset style="border:0;padding:0;margin:0">
     <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
 
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+    <div class="apply-options">
       <label><input type="checkbox" name="apply_methods" value="Courriel"> Courriel</label>
       <label><input type="checkbox" name="apply_methods" value="En personne"> En personne</label>
       <label><input type="checkbox" name="apply_methods" value="Téléphone/SMS"> Téléphone / SMS</label>
@@ -282,7 +339,7 @@
     </div>
   </fieldset>
 
-  <div class="muted" style="margin-top:8px">Vous pouvez choisir plusieurs options.</div>
+  <span class="muted">Vous pouvez choisir plusieurs options.</span>
 </div>
 
 
