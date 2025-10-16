@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annoncer — ZoneConstruction.ca</title>
   <meta name="description" content="Publiez une offre d’emploi en construction au Québec. Paiement sécurisé via Stripe, publication automatisée.">
-
-  <!-- CSP -->
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self';
                  img-src 'self' data: https:;
@@ -61,34 +59,33 @@
 
   <div class="wrap">
     <h1>Publier une offre</h1>
-    <p class="notice">Remplissez le formulaire puis cliquez « Continuer au paiement ». Page <strong>WRITE-ONLY</strong> : toutes les écritures passent par ici.</p>
+    <p class="notice">Choisissez la catégorie et répondez à la question CCQ. Les champs pertinents apparaîtront selon votre choix.</p>
 
     <div class="card">
       <form id="jobForm" class="grid" novalidate>
-        <!-- SECTION: CCQ & Catégories -->
+        <!-- SECTION: Catégorie générale + CCQ (toujours visibles au départ) -->
         <div class="section">
-          <h2>🧭 CCQ & sélecteurs</h2>
-
+          <h2>🧭 Catégorie & CCQ</h2>
           <div class="grid grid-2">
-            <!-- CCQ radios -->
-            <div>
-              <label class="req">Carte de compétence CCQ requise ?</label>
-              <div style="display:flex;gap:16px;margin-top:6px">
-                <label><input type="radio" name="ccq_required" value="OUI"> Oui</label>
-                <label><input type="radio" name="ccq_required" value="NON" required checked> Non</label>
-              </div>
-            </div>
-
-            <!-- Catégorie (générale) — visible seulement si CCQ = NON -->
-            <div id="wrapCategorie" class="hidden">
+            <!-- Catégorie générale -->
+            <div id="wrapCategorie">
               <label class="req" for="categorie">Catégorie</label>
-              <select id="categorie" name="Categorie">
+              <select id="categorie" name="Categorie" required>
                 <option value="" disabled selected>— Sélectionner —</option>
                 <option>Administration</option>
                 <option>Vente</option>
                 <option>Chantier</option>
               </select>
-              <div class="muted">Choisissez la catégorie pour les postes non CCQ.</div>
+              <div class="muted">Pour les postes non CCQ. Si vous choisissez CCQ = Oui, des sélecteurs spécialisés apparaîtront.</div>
+            </div>
+
+            <!-- CCQ radios -->
+            <div>
+              <label class="req">Carte de compétence CCQ requise ?</label>
+              <div style="display:flex;gap:16px;margin-top:6px">
+                <label><input type="radio" name="ccq_required" value="OUI"> Oui</label>
+                <label><input type="radio" name="ccq_required" value="NON"> Non</label>
+              </div>
             </div>
           </div>
 
@@ -178,7 +175,7 @@
           <h2>📝 Détails du poste</h2>
 
           <!-- Titre & Salaire — visibles seulement si CCQ = NON -->
-          <div id="wrapTitle">
+          <div id="wrapTitle" class="hidden">
             <label class="req" for="titre">Titre du poste</label>
             <input id="titre" name="Job Title" placeholder="Ex: Charpentier-menuisier, Adjoint administratif" />
           </div>
@@ -204,10 +201,10 @@
               </select>
             </div>
 
-            <div id="wrapSalaire">
+            <div id="wrapSalaire" class="hidden">
               <label for="salaire">Salaire</label>
               <input id="salaire" name="Salary Display" placeholder="ex: entre 35$ et 40$ de l'heure" />
-              <div class="muted">Affichez ici ce qui sera visible sur la page (Google Jobs).</div>
+              <div class="muted">Affiché aussi sur la fiche (Google Jobs).</div>
             </div>
           </div>
         </div>
@@ -307,59 +304,63 @@
   <script>
     const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
 
-    // Helpers
     const addHidden = el => el.classList.add('hidden');
     const remHidden = el => el.classList.remove('hidden');
-    const isHidden = el => !el || el.classList.contains('hidden') || el.offsetParent === null;
+    const isHidden  = el => !el || el.classList.contains('hidden') || el.offsetParent === null;
 
-    // CCQ-related wrappers/fields
-    const radiosCcq   = document.querySelectorAll('input[name="ccq_required"]');
+    // CCQ radios
+    const radiosCcq  = document.querySelectorAll('input[name="ccq_required"]');
 
+    // General category
     const wrapCategorie = document.getElementById('wrapCategorie');
     const categorie     = document.getElementById('categorie');
 
+    // CCQ groups
     const wrapMetier  = document.getElementById('wrapMetier');
     const wrapNiveau  = document.getElementById('wrapNiveau');
     const wrapSecteur = document.getElementById('wrapSecteur');
     const wrapRegion  = document.getElementById('wrapRegion');
-
     const metier  = document.getElementById('metier');
     const niveau  = document.getElementById('niveau');
     const secteur = document.getElementById('secteur');
     const region  = document.getElementById('region');
 
-    // Title/Salary wrappers
+    // Title/Salary blocks
     const wrapTitle   = document.getElementById('wrapTitle');
     const wrapSalaire = document.getElementById('wrapSalaire');
     const titre   = document.getElementById('titre');
     const salaire = document.getElementById('salaire');
 
     function updateCcqUI(){
-      const val = document.querySelector('input[name="ccq_required"]:checked')?.value;
-      const ccqOui = (val === 'OUI');
+      const selected = document.querySelector('input[name="ccq_required"]:checked');
+      const ccqOui = selected && selected.value === 'OUI';
 
-      // CCQ = OUI → show 4 CCQ selects; hide Catégorie (générale), Titre, Salaire
-      [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(el => ccqOui ? remHidden(el) : addHidden(el));
-      [metier,niveau,secteur,region].forEach(el=>{
-        if(!el) return;
-        if(ccqOui){ el.setAttribute('required','required'); }
-        else { el.removeAttribute('required'); el.selectedIndex = 0; }
-      });
-
-      if(ccqOui){
+      if (ccqOui){
+        // Hide general category; show CCQ selects; hide title/salary
         addHidden(wrapCategorie);
         if (categorie){ categorie.removeAttribute('required'); categorie.selectedIndex = 0; }
+
+        [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(remHidden);
+        [metier,niveau,secteur,region].forEach(el => el?.setAttribute('required','required'));
+
         addHidden(wrapTitle); addHidden(wrapSalaire);
-        if (titre){ titre.removeAttribute('required'); titre.value=''; }
+        titre?.removeAttribute('required');
       } else {
-        // CCQ = NON → hide 4 CCQ selects; show Catégorie, Titre, Salaire
+        // Non or nothing selected yet → show general category; hide CCQ selects
         remHidden(wrapCategorie);
-        if (categorie){ categorie.setAttribute('required','required'); }
+        categorie?.setAttribute('required','required');
 
-        addHidden(wrapMetier); addHidden(wrapNiveau); addHidden(wrapSecteur); addHidden(wrapRegion);
+        [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(addHidden);
+        [metier,niveau,secteur,region].forEach(el => { if(el){ el.removeAttribute('required'); el.selectedIndex = 0; } });
 
-        remHidden(wrapTitle); remHidden(wrapSalaire);
-        if (titre){ titre.setAttribute('required','required'); }
+        // If explicitly NON, show title/salary; if nothing chosen, keep them hidden until submit
+        if (selected && selected.value === 'NON'){
+          remHidden(wrapTitle); remHidden(wrapSalaire);
+          titre?.setAttribute('required','required');
+        } else {
+          addHidden(wrapTitle); addHidden(wrapSalaire);
+          titre?.removeAttribute('required');
+        }
       }
     }
 
@@ -372,22 +373,26 @@
     const logoImg = document.getElementById('logoImg');
     const logoClear = document.getElementById('logoClear');
 
-    logoInput.addEventListener('change', ()=>{
-      const file = logoInput.files?.[0];
-      if(file){
-        const url = URL.createObjectURL(file);
-        logoImg.src = url;
-        remHidden(logoPreview);
-      }else{
-        addHidden(logoPreview);
+    if (logoInput){
+      logoInput.addEventListener('change', ()=>{
+        const file = logoInput.files?.[0];
+        if(file){
+          const url = URL.createObjectURL(file);
+          logoImg.src = url;
+          remHidden(logoPreview);
+        }else{
+          addHidden(logoPreview);
+          logoImg.removeAttribute('src');
+        }
+      });
+    }
+    if (logoClear){
+      logoClear.addEventListener('click', ()=>{
+        logoInput.value = '';
         logoImg.removeAttribute('src');
-      }
-    });
-    logoClear.addEventListener('click', ()=>{
-      logoInput.value = '';
-      logoImg.removeAttribute('src');
-      addHidden(logoPreview);
-    });
+        addHidden(logoPreview);
+      });
+    }
 
     // Submit
     const form = document.getElementById('jobForm');
@@ -396,8 +401,10 @@
     form.addEventListener('submit', async (e)=>{
       e.preventDefault();
 
-      // Validate visible required fields only
-      const requiredFields = [...form.querySelectorAll('[required]')].filter(el => !isHidden(el.closest('.section')) && !isHidden(el.closest('div')) && !isHidden(el));
+      // Validate visible required fields
+      const requiredFields = [...form.querySelectorAll('[required]')]
+        .filter(el => !isHidden(el) && !isHidden(el.closest('.section')) && !isHidden(el.closest('div')));
+
       for(const el of requiredFields){
         if(!String(el.value||'').trim()){
           alert('Veuillez remplir tous les champs requis (*)');
@@ -417,7 +424,7 @@
       fd.append('Apply Methods', methods.join(', '));
       fd.append('action','create_session'); // server decides the price
 
-      // Store in session for merci.html
+      // Save for merci.html
       const plain = Object.fromEntries(fd.entries());
       sessionStorage.setItem('jobForm', JSON.stringify(plain));
 
@@ -441,5 +448,4 @@
   </script>
 </body>
 </html>
-
 
