@@ -274,26 +274,11 @@
   <fieldset style="border:0;padding:0;margin:0">
     <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
 
-    <div class="apply-grid">
-      <label class="chip">
-        <input type="checkbox" name="apply_methods" value="Courriel" />
-        <span>Courriel</span>
-      </label>
-
-      <label class="chip">
-        <input type="checkbox" name="apply_methods" value="En personne" />
-        <span>En personne</span>
-      </label>
-
-      <label class="chip">
-        <input type="checkbox" name="apply_methods" value="Téléphone/SMS" />
-        <span>Téléphone / SMS</span>
-      </label>
-
-      <label class="chip">
-        <input type="checkbox" name="apply_methods" value="Site Web" />
-        <span>Site Web</span>
-      </label>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+      <label><input type="checkbox" name="apply_methods" value="Courriel"> Courriel</label>
+      <label><input type="checkbox" name="apply_methods" value="En personne"> En personne</label>
+      <label><input type="checkbox" name="apply_methods" value="Téléphone/SMS"> Téléphone / SMS</label>
+      <label><input type="checkbox" name="apply_methods" value="Site Web"> Site Web</label>
     </div>
   </fieldset>
 
