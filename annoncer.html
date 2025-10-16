@@ -56,6 +56,40 @@
     .logo-preview img{max-height:48px;border-radius:8px;border:1px solid var(--line)}
 
     .hidden{display:none}
+    /* Comment postuler — responsive layout */
+.apply-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:12px;
+  align-items:stretch;
+  margin-top:10px;
+}
+
+.chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 14px;
+  background:#fff;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.chip input{ margin:0; }
+
+/* Better wrapping on small screens */
+@media (max-width:640px){
+  .apply-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .chip{ white-space:normal; }
+}
+
+/* Optional: selected state highlight */
+.chip:has(input:checked){
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(249,165,51,.15);
+}
   </style>
 </head>
 <body>
@@ -259,17 +293,24 @@
           </div>
         </div>
 
-        <!-- SECTION: Comment postuler -->
-        <div class="section">
-          <h2>Comment postuler</h2>
-          <div class="chips" role="group" aria-label="Méthodes de candidature">
-            <label class="chip"><input type="checkbox" name="apply_methods" value="Courriel" /> Courriel</label>
-            <label class="chip"><input type="checkbox" name="apply_methods" value="En personne" /> En personne</label>
-            <label class="chip"><input type="checkbox" name="apply_methods" value="Téléphone/SMS" /> Téléphone / SMS</label>
-            <label class="chip"><input type="checkbox" name="apply_methods" value="Site Web" /> Site Web</label>
-          </div>
-          <div class="muted">Vous pouvez choisir plusieurs options.</div>
-        </div>
+<!-- SECTION: Comment postuler -->
+<div class="section">
+  <h2>Comment postuler</h2>
+
+  <fieldset class="apply" style="border:0;padding:0;margin:0">
+    <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
+
+    <div class="apply-grid">
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Courriel" /> Courriel</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="En personne" /> En personne</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Téléphone/SMS" /> Téléphone / SMS</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Site Web" /> Site Web</label>
+    </div>
+  </fieldset>
+
+  <div class="muted" style="margin-top:8px">Vous pouvez choisir plusieurs options.</div>
+</div>
+
 
         <!-- Honeypot anti-bot (reste vide) -->
         <input type="text" name="website_hp" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
@@ -359,7 +400,23 @@
     document.addEventListener('DOMContentLoaded', updateCcqUI);
 
     // Logo preview
-    const logoInput = document.getElementById('logo');
+    const logoInput = document.getElementById('logo');<!-- SECTION: Comment postuler -->
+<div class="section">
+  <h2>Comment postuler</h2>
+
+  <fieldset class="apply" style="border:0;padding:0;margin:0">
+    <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
+
+    <div class="apply-grid">
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Courriel" /> Courriel</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="En personne" /> En personne</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Téléphone/SMS" /> Téléphone / SMS</label>
+      <label class="chip"><input type="checkbox" name="apply_methods" value="Site Web" /> Site Web</label>
+    </div>
+  </fieldset>
+
+  <div class="muted" style="margin-top:8px">Vous pouvez choisir plusieurs options.</div>
+</div>
     const logoPreview = document.getElementById('logoPreview');
     const logoImg = document.getElementById('logoImg');
     const logoClear = document.getElementById('logoClear');
