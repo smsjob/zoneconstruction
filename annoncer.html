@@ -65,21 +65,12 @@
 
     <div class="card">
       <form id="jobForm" class="grid" novalidate>
-        <!-- SECTION: Catégorie & CCQ -->
+        <!-- SECTION: CCQ & Catégories -->
         <div class="section">
-          <h2>🧭 Catégorie & CCQ</h2>
-          <div class="grid grid-2">
-            <div>
-              <label class="req" for="categorie">Catégorie</label>
-              <select id="categorie" name="Categorie" required>
-                <option value="" disabled selected>— Sélectionner —</option>
-                <option>Administration</option>
-                <option>Vente</option>
-                <option>Chantier</option>
-              </select>
-              <div class="muted">Vous pourrez en ajouter d’autres plus tard.</div>
-            </div>
+          <h2>🧭 CCQ & sélecteurs</h2>
 
+          <div class="grid grid-2">
+            <!-- CCQ radios -->
             <div>
               <label class="req">Carte de compétence CCQ requise ?</label>
               <div style="display:flex;gap:16px;margin-top:6px">
@@ -87,9 +78,21 @@
                 <label><input type="radio" name="ccq_required" value="NON" required checked> Non</label>
               </div>
             </div>
+
+            <!-- Catégorie (générale) — visible seulement si CCQ = NON -->
+            <div id="wrapCategorie" class="hidden">
+              <label class="req" for="categorie">Catégorie</label>
+              <select id="categorie" name="Categorie">
+                <option value="" disabled selected>— Sélectionner —</option>
+                <option>Administration</option>
+                <option>Vente</option>
+                <option>Chantier</option>
+              </select>
+              <div class="muted">Choisissez la catégorie pour les postes non CCQ.</div>
+            </div>
           </div>
 
-          <!-- 4 catégories (affichées seulement si CCQ = OUI) -->
+          <!-- 4 sélecteurs CCQ — visibles seulement si CCQ = OUI -->
           <div id="wrapMetier" class="section hidden">
             <label class="req" for="metier">Métier / Occupation</label>
             <select id="metier" name="Metier">
@@ -174,7 +177,7 @@
         <div class="section">
           <h2>📝 Détails du poste</h2>
 
-          <!-- Titre & Salaire (affichés seulement si CCQ = NON) -->
+          <!-- Titre & Salaire — visibles seulement si CCQ = NON -->
           <div id="wrapTitle">
             <label class="req" for="titre">Titre du poste</label>
             <input id="titre" name="Job Title" placeholder="Ex: Charpentier-menuisier, Adjoint administratif" />
@@ -204,7 +207,7 @@
             <div id="wrapSalaire">
               <label for="salaire">Salaire</label>
               <input id="salaire" name="Salary Display" placeholder="ex: entre 35$ et 40$ de l'heure" />
-              <div class="muted">Affichez ici ce qui sera aussi visible sur la page (exigence Google Jobs).</div>
+              <div class="muted">Affichez ici ce qui sera visible sur la page (Google Jobs).</div>
             </div>
           </div>
         </div>
@@ -309,12 +312,17 @@
     const remHidden = el => el.classList.remove('hidden');
     const isHidden = el => !el || el.classList.contains('hidden') || el.offsetParent === null;
 
-    // CCQ controls
-    const radiosCcq  = document.querySelectorAll('input[name="ccq_required"]');
-    const wrapMetier = document.getElementById('wrapMetier');
-    const wrapNiveau = document.getElementById('wrapNiveau');
-    const wrapSecteur= document.getElementById('wrapSecteur');
-    const wrapRegion = document.getElementById('wrapRegion');
+    // CCQ-related wrappers/fields
+    const radiosCcq   = document.querySelectorAll('input[name="ccq_required"]');
+
+    const wrapCategorie = document.getElementById('wrapCategorie');
+    const categorie     = document.getElementById('categorie');
+
+    const wrapMetier  = document.getElementById('wrapMetier');
+    const wrapNiveau  = document.getElementById('wrapNiveau');
+    const wrapSecteur = document.getElementById('wrapSecteur');
+    const wrapRegion  = document.getElementById('wrapRegion');
+
     const metier  = document.getElementById('metier');
     const niveau  = document.getElementById('niveau');
     const secteur = document.getElementById('secteur');
@@ -330,7 +338,7 @@
       const val = document.querySelector('input[name="ccq_required"]:checked')?.value;
       const ccqOui = (val === 'OUI');
 
-      // CCQ = OUI → show 4 selects, hide title/salary
+      // CCQ = OUI → show 4 CCQ selects; hide Catégorie (générale), Titre, Salaire
       [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(el => ccqOui ? remHidden(el) : addHidden(el));
       [metier,niveau,secteur,region].forEach(el=>{
         if(!el) return;
@@ -338,13 +346,20 @@
         else { el.removeAttribute('required'); el.selectedIndex = 0; }
       });
 
-      // Title/Salary toggle (shown only if CCQ = NON)
-      if (ccqOui){
+      if(ccqOui){
+        addHidden(wrapCategorie);
+        if (categorie){ categorie.removeAttribute('required'); categorie.selectedIndex = 0; }
         addHidden(wrapTitle); addHidden(wrapSalaire);
-        if (titre)   titre.removeAttribute('required');
+        if (titre){ titre.removeAttribute('required'); titre.value=''; }
       } else {
+        // CCQ = NON → hide 4 CCQ selects; show Catégorie, Titre, Salaire
+        remHidden(wrapCategorie);
+        if (categorie){ categorie.setAttribute('required','required'); }
+
+        addHidden(wrapMetier); addHidden(wrapNiveau); addHidden(wrapSecteur); addHidden(wrapRegion);
+
         remHidden(wrapTitle); remHidden(wrapSalaire);
-        if (titre)   titre.setAttribute('required','required'); // make title required on NON
+        if (titre){ titre.setAttribute('required','required'); }
       }
     }
 
