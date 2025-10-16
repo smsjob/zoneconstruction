@@ -41,26 +41,6 @@
     .grid{display:grid;gap:16px}
     .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 
-    /* Comment postuler — responsive grid chips */
-    .apply-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
-      gap:12px;
-      align-items:stretch;
-      margin-top:10px;
-    }
-    .chip{
-      display:flex;align-items:center;gap:10px;
-      border:1px solid var(--line);border-radius:999px;
-      padding:12px 14px;background:#fff;line-height:1.2;white-space:nowrap;
-    }
-    .chip input{margin:0}
-    @media (max-width:640px){
-      .apply-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .chip{white-space:normal}
-    }
-    .chip:has(input:checked){border-color:var(--brand);box-shadow:0 0 0 3px rgba(249,165,51,.15)}
-
     .logo-preview{display:flex;align-items:center;gap:12px;margin-top:8px}
     .logo-preview img{max-height:48px;border-radius:8px;border:1px solid var(--line)}
     .btn{display:inline-block;background:var(--brand);color:#111;border:none;border-radius:999px;padding:12px 16px;font-weight:700;text-decoration:none;cursor:pointer;transition:.15s background}
@@ -68,6 +48,51 @@
     .btn[disabled]{opacity:.6;cursor:default}
     footer{border-top:1px solid #ddd;margin-top:40px;padding:20px;text-align:center;font-size:0.9rem}
     .hidden{display:none}
+
+    /* Comment postuler — FIXED, responsive & unclipped */
+.apply-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:12px;
+  align-items:stretch;
+  margin-top:10px;
+}
+
+.chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 14px;
+  background:#fff;
+  line-height:1.25;
+  font-weight:600;
+  overflow:hidden;
+}
+
+.chip input{
+  margin:0;
+  flex:0 0 auto;
+}
+
+.chip span{
+  flex:1 1 auto;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+@media (max-width:640px){
+  .apply-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .chip span{ white-space:normal; }
+}
+
+.chip:has(input:checked){
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(249,165,51,.15);
+}
+
   </style>
 </head>
 <body>
@@ -242,20 +267,38 @@
             <div><label for="website">Site Web</label><input id="website" name="Company Website" placeholder="https://..." /></div>
           </div>
 
-          <!-- Comment postuler -->
-          <div class="section">
-            <h2>Comment postuler</h2>
-            <fieldset class="apply" style="border:0;padding:0;margin:0">
-              <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
-              <div class="apply-grid">
-                <label class="chip"><input type="checkbox" name="apply_methods" value="Courriel" /> Courriel</label>
-                <label class="chip"><input type="checkbox" name="apply_methods" value="En personne" /> En personne</label>
-                <label class="chip"><input type="checkbox" name="apply_methods" value="Téléphone/SMS" /> Téléphone / SMS</label>
-                <label class="chip"><input type="checkbox" name="apply_methods" value="Site Web" /> Site Web</label>
-              </div>
-            </fieldset>
-            <div class="muted" style="margin-top:8px">Vous pouvez choisir plusieurs options.</div>
-          </div>
+<!-- SECTION: Comment postuler -->
+<div class="section">
+  <h2>Comment postuler</h2>
+
+  <fieldset style="border:0;padding:0;margin:0">
+    <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
+
+    <div class="apply-grid">
+      <label class="chip">
+        <input type="checkbox" name="apply_methods" value="Courriel" />
+        <span>Courriel</span>
+      </label>
+
+      <label class="chip">
+        <input type="checkbox" name="apply_methods" value="En personne" />
+        <span>En personne</span>
+      </label>
+
+      <label class="chip">
+        <input type="checkbox" name="apply_methods" value="Téléphone/SMS" />
+        <span>Téléphone / SMS</span>
+      </label>
+
+      <label class="chip">
+        <input type="checkbox" name="apply_methods" value="Site Web" />
+        <span>Site Web</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="muted" style="margin-top:8px">Vous pouvez choisir plusieurs options.</div>
+</div>
 
           <!-- Honeypot anti-bot -->
           <input type="text" name="website_hp" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
