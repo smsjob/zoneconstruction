@@ -384,10 +384,8 @@
     const categorie     = document.getElementById('categorie');
 
     // 4 CCQ selectors (shown only if OUI)
-    const wrapMetier  = document.getElementById('wrapMetier');
-    const wrapNiveau  = document.getElementById('wrapNiveau');
-    const wrapSecteur = document.getElementById('wrapSecteur');
-    const wrapRegion  = document.getElementById('wrapRegion');
+const ccqBlock     = document.getElementById('ccqBlock');
+const generalBlock = document.getElementById('wrapCategorie');
     const metier  = document.getElementById('metier');
     const niveau  = document.getElementById('niveau');
     const secteur = document.getElementById('secteur');
@@ -399,41 +397,41 @@
     const titre   = document.getElementById('titre');
     const salaire = document.getElementById('salaire');
 
-    function updateCcqUI(){
-      const selected = document.querySelector('input[name="ccq_required"]:checked');
+function updateCcqUI(){
+  const selected = document.querySelector('input[name="ccq_required"]:checked');
+  if(!selected){
+    addHidden(afterCcq);
+    return;
+  }
 
-      if(!selected){
-        addHidden(afterCcq);
-        return;
-      }
+  remHidden(afterCcq);
 
-      // once answered, reveal the rest of the form
-      remHidden(afterCcq);
-
-      const ccqOui = selected.value === 'OUI';
-
-      if (ccqOui){
-        // CCQ = OUI → CCQ selects required & visible; hide general category and title/salary
-        addHidden(wrapCategorie);
-        categorie?.removeAttribute('required'); if (categorie) categorie.selectedIndex = 0;
-
-        [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(remHidden);
-        [metier,niveau,secteur,region].forEach(el => el?.setAttribute('required','required'));
-
-        addHidden(wrapTitle); addHidden(wrapSalaire);
-        titre?.removeAttribute('required'); if (titre) titre.value = '';
-      }else{
-        // CCQ = NON → show general category + title/salary; hide CCQ selects
-        remHidden(wrapCategorie);
-        categorie?.setAttribute('required','required');
-
-        [wrapMetier,wrapNiveau,wrapSecteur,wrapRegion].forEach(addHidden);
-        [metier,niveau,secteur,region].forEach(el => { if(el){ el.removeAttribute('required'); el.selectedIndex = 0; } });
-
-        remHidden(wrapTitle); remHidden(wrapSalaire);
-        titre?.setAttribute('required','required');
-      }
-    }
+  const ccqOui = selected.value === 'OUI';
+  if (ccqOui){
+    // Show CCQ categories, hide general category
+    remHidden(ccqBlock);
+    addHidden(generalBlock);
+    [metier,niveau,secteur,region].forEach(el => el?.setAttribute('required','required'));
+    categorie?.removeAttribute('required');
+    if (categorie) categorie.selectedIndex = 0;
+    addHidden(wrapTitle);
+    addHidden(wrapSalaire);
+    titre?.removeAttribute('required');
+    if (titre) titre.value = '';
+  } else {
+    // Show general category + title/salary, hide CCQ
+    remHidden(generalBlock);
+    addHidden(ccqBlock);
+    categorie?.setAttribute('required','required');
+    [metier,niveau,secteur,region].forEach(el => {
+      el?.removeAttribute('required');
+      el.selectedIndex = 0;
+    });
+    remHidden(wrapTitle);
+    remHidden(wrapSalaire);
+    titre?.setAttribute('required','required');
+  }
+}
 
     radiosCcq.forEach(r => r.addEventListener('change', updateCcqUI));
     document.addEventListener('DOMContentLoaded', updateCcqUI);
