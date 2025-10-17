@@ -5,14 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annoncer — ZoneConstruction.ca</title>
   <meta name="description" content="Publiez une offre d’emploi en construction au Québec. Paiement sécurisé via Stripe, publication automatisée.">
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self';
-                 img-src 'self' data: https:;
-                 script-src 'self' 'unsafe-inline';
-                 style-src 'self' 'unsafe-inline' https:;
-                 connect-src 'self' https://script.google.com;
-                 frame-ancestors 'none';
-                 base-uri 'self'">
 
   <style>
   :root {
@@ -51,33 +43,29 @@
     margin:8px 0;
   }
 
-  /* ===== Enhanced Section Styling ===== */
-/* ===== Tighter sections + cleaner headings ===== */
-.section{
-  margin:20px 0;          /* was ~36px */
-  padding:16px 18px;      /* was ~22-24px */
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-  box-shadow:0 1px 3px rgba(0,0,0,.04);
-}
-.section h2{
-  margin:0 0 12px;
-  font-size:1.08rem;
-  font-weight:700;
-  color:var(--text);
-  border-bottom:1px solid var(--line); /* thinner divider */
-  padding-bottom:6px;
-}
+  /* Section styling */
+  .section{
+    margin:18px 0;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .section h2{
+    margin:0 0 12px;
+    font-size:1.08rem;
+    font-weight:700;
+    color:var(--text);
+    border-bottom:1px solid var(--line);
+    padding-bottom:6px;
+  }
+  .inline-note{
+    margin:0 0 8px;
+    font-size:.95rem;
+    color:#444;
+  }
 
-/* small helper note shown above the CCQ question */
-.inline-note{
-  margin:0 0 8px;
-  font-size:.95rem;
-  color:#444;
-}
-
-  /* Labels & Inputs */
   label { font-weight:700; display:block; margin-bottom:6px; }
   .muted { color:var(--muted); font-size:.9rem; }
   .req::after { content:" *"; color:#b00020; }
@@ -99,9 +87,6 @@
 
   .grid { display:grid; gap:16px; }
   .grid-2 { grid-template-columns:repeat(2, minmax(0,1fr)); }
-
-  .logo-preview { display:flex; align-items:center; gap:12px; margin-top:8px; }
-  .logo-preview img { max-height:48px; border-radius:8px; border:1px solid var(--line); }
 
   .btn {
     display:inline-block;
@@ -128,36 +113,29 @@
 
   .hidden { display:none; }
 
-  /* ===== Comment postuler simplified ===== */
   .apply-options {
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:10px;
     margin-top:12px;
   }
-
   .apply-options label {
     display:flex;
     align-items:center;
     gap:10px;
     font-weight:600;
-    font-size:1rem;
     cursor:pointer;
-    padding:6px 0;
   }
-
   .apply-options input[type="checkbox"] {
     width:20px;
     height:20px;
     accent-color:var(--brand);
-    cursor:pointer;
   }
 
-  /* Better spacing on small screens */
   @media (max-width:640px) {
-    .section { padding:18px; }
+    .section { padding:14px; }
   }
-</style>
+  </style>
 </head>
 <body>
   <header>
@@ -175,21 +153,71 @@
 
     <div class="card">
       <form id="jobForm" class="grid" novalidate>
-        <!-- SECTION: Question CCQ ONLY (visible au départ) -->
- <div class="section">
-  <p class="inline-note">Devenir CCQ : répondez d’abord à la question ci-dessous.</p>
-  <label class="req">Carte de compétence CCQ requise ?</label>
-  <div style="display:flex;gap:16px;margin-top:6px">
-    <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
-    <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
-  </div>
-</div>
 
-        <!-- TOUT LE RESTE — masqué tant que la question n’est pas répondue -->
+        <!-- SECTION: Question CCQ -->
+        <div class="section">
+          <p class="inline-note">Devenir CCQ : répondez d’abord à la question ci-dessous.</p>
+          <label class="req">Carte de compétence CCQ requise ?</label>
+          <div style="display:flex;gap:16px;margin-top:6px">
+            <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
+            <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
+          </div>
+        </div>
+
+        <!-- RESTE DU FORMULAIRE -->
         <div id="afterCcq" class="hidden">
-          <!-- CCQ = NON → Catégorie générale -->
+
+          <!-- SECTION: Catégories CCQ -->
+          <div id="ccqBlock" class="section hidden">
+            <h2>Catégories CCQ</h2>
+            <div class="grid grid-2">
+              <div>
+                <label class="req" for="metier">Métier / Occupation</label>
+                <select id="metier" name="Metier">
+                  <option value="" disabled selected>— Sélectionner —</option>
+                  <option>Charpentier-menuisier</option>
+                  <option>Électricien/Électricienne</option>
+                  <option>Plâtrier/Plâtrière</option>
+                  <option>Soudeur/Soudeuse</option>
+                  <option>Tuyauteur/Tuyauteuse</option>
+                </select>
+              </div>
+              <div>
+                <label class="req" for="niveau">Niveau</label>
+                <select id="niveau" name="Niveau">
+                  <option value="" disabled selected>— Sélectionner —</option>
+                  <option>Compagnon</option>
+                  <option>Apprenti</option>
+                  <option>Occupation</option>
+                </select>
+              </div>
+              <div>
+                <label class="req" for="secteur">Secteur</label>
+                <select id="secteur" name="Secteur">
+                  <option value="" disabled selected>— Sélectionner —</option>
+                  <option>Génie Civil et Voirie</option>
+                  <option>Industriel</option>
+                  <option>Institutionnel et Commercial</option>
+                  <option>Résidentiel</option>
+                </select>
+              </div>
+              <div>
+                <label class="req" for="region">Région</label>
+                <select id="region" name="Region">
+                  <option value="" disabled selected>— Sélectionner —</option>
+                  <option>Grand Montréal</option>
+                  <option>Québec</option>
+                  <option>Estrie</option>
+                  <option>Outaouais</option>
+                  <option>Abitibi-Témiscamingue</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: Catégorie générale (NON) -->
           <div id="wrapCategorie" class="section hidden">
-            <h2>Catégorie</h2>
+            <h2>Catégorie générale</h2>
             <label class="req" for="categorie">Catégorie</label>
             <select id="categorie" name="Categorie">
               <option value="" disabled selected>— Sélectionner —</option>
@@ -199,99 +227,32 @@
             </select>
           </div>
 
-          <!-- CCQ = OUI → 4 sélecteurs CCQ -->
-<!-- CCQ = OUI → BIG SECTION: Catégories CCQ -->
-<div id="ccqBlock" class="section hidden">
-  <h2>Catégories CCQ</h2>
-  <div class="grid grid-2">
-    <div>
-      <label class="req" for="metier">Métier / Occupation</label>
-      <select id="metier" name="Metier">
-        <option value="" disabled selected>— Sélectionner —</option>
-        <option>Arpenteur/Arpenteuse</option>
-        <option>Briqueteur-maçon/Briqueteuse-maçonne</option>
-        <option>Charpentier-menuisier/Charpentière-menuisière</option>
-        <option>Électricien/Électricienne</option>
-        <option>Plâtrier/Plâtrière</option>
-        <option>Soudeur/Soudeuse</option>
-        <option>Tuyauteur/Tuyauteuse</option>
-      </select>
-    </div>
+          <!-- Titre / Description -->
+          <div id="wrapTitle" class="hidden">
+            <label class="req" for="titre">Titre du poste</label>
+            <input id="titre" name="Job Title" placeholder="Ex: Adjoint administratif, Charpentier-menuisier" />
+          </div>
 
-    <div>
-      <label class="req" for="niveau">Niveau</label>
-      <select id="niveau" name="Niveau">
-        <option value="" disabled selected>— Sélectionner —</option>
-        <option>Compagnon</option>
-        <option>Apprenti</option>
-        <option>Occupation</option>
-      </select>
-    </div>
+          <div>
+            <label class="req" for="description">Description</label>
+            <textarea id="description" name="Job Description" required></textarea>
+          </div>
 
-    <div>
-      <label class="req" for="secteur">Secteur</label>
-      <select id="secteur" name="Secteur">
-        <option value="" disabled selected>— Sélectionner —</option>
-        <option>Génie Civil et Voirie</option>
-        <option>Industriel</option>
-        <option>Institutionnel et Commercial</option>
-        <option>Résidentiel</option>
-      </select>
-    </div>
-
-    <div>
-      <label class="req" for="region">Région</label>
-      <select id="region" name="Region">
-        <option value="" disabled selected>— Sélectionner —</option>
-        <option>01 Îles-de-la-Madeleine</option>
-        <option>02 Bas-Saint-Laurent–Gaspésie</option>
-        <option>03 Saguenay–Lac-Saint-Jean</option>
-        <option>04 Québec</option>
-        <option>06 Mauricie–Bois-Francs</option>
-        <option>07 Estrie</option>
-        <option>08 Grand Montréal</option>
-        <option>09 Outaouais</option>
-        <option>10 Abitibi-Témiscamingue</option>
-        <option>11 Côte-Nord</option>
-        <option>13 Baie-James</option>
-        <option>14 Nunavik</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-            <!-- visibles seulement si CCQ = NON -->
-            <div id="wrapTitle" class="hidden">
-              <label class="req" for="titre">Titre du poste</label>
-              <input id="titre" name="Job Title" placeholder="Ex: Adjoint administratif, Charpentier-menuisier" />
-            </div>
-
+          <div class="grid grid-2">
             <div>
-              <label class="req" for="description">Description</label>
-              <textarea id="description" name="Job Description" required></textarea>
+              <label class="req" for="horaire">Horaire</label>
+              <select id="horaire" name="Employment Type" required>
+                <option value="" disabled selected>— Sélectionner —</option>
+                <option>Temps-Plein</option>
+                <option>Temps-Partiel</option>
+                <option>Contractuel</option>
+                <option>Travail à distance</option>
+              </select>
             </div>
-
-            <div class="grid grid-2">
-              <div>
-                <label class="req" for="horaire">Horaire</label>
-                <select id="horaire" name="Employment Type" required>
-                  <option value="" disabled selected>— Sélectionner —</option>
-                  <option>Temps-Plein</option>
-                  <option>Temps-Partiel</option>
-                  <option>Contractuel</option>
-                  <option>Rotation Fly-in Fly-out</option>
-                  <option>Horaire varié</option>
-                  <option>Travail à distance</option>
-                  <option>Indépendant</option>
-                  <option>Autre arrangement</option>
-                </select>
-              </div>
-
-              <div id="wrapSalaire" class="hidden">
-                <label for="salaire">Salaire</label>
-                <input id="salaire" name="Salary Display" placeholder="ex: 35–40 $/h" />
-                <div class="muted">Affiché aussi sur la fiche (Google Jobs).</div>
-              </div>
+            <div id="wrapSalaire" class="hidden">
+              <label for="salaire">Salaire</label>
+              <input id="salaire" name="Salary Display" placeholder="ex: 35–40 $/h" />
+              <div class="muted">Affiché aussi sur la fiche (Google Jobs).</div>
             </div>
           </div>
 
@@ -303,62 +264,41 @@
               <div><label class="req" for="city">Ville</label><input id="city" name="City" required /></div>
             </div>
             <div class="grid grid-2">
-              <div><label class="req" for="postal">Code postal</label><input id="postal" name="Postal Code" required placeholder="H2X 1Y4" pattern="[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d" title="Format A1A 1A1" /></div>
+              <div><label class="req" for="postal">Code postal</label><input id="postal" name="Postal Code" required placeholder="H2X 1Y4" /></div>
               <div><label class="req" for="prov">Province</label><input id="prov" name="addressRegion" required value="QC" /></div>
             </div>
             <div><label class="req" for="country">Pays</label><input id="country" name="Country" required value="Canada" /></div>
           </div>
 
-          <!-- Entreprise & contact -->
+          <!-- Entreprise -->
           <div class="section">
             <h2>Entreprise et contact</h2>
-            <div><label class="req" for="company">Nom de l'entreprise</label><input id="company" name="Company Name" required /></div>
-            <div>
-              <label for="logo">Logo de l'entreprise</label>
-              <input id="logo" type="file" name="Logo File" accept="image/*" />
-              <div id="logoPreview" class="logo-preview hidden">
-                <img id="logoImg" alt="Logo preview" />
-                <button id="logoClear" type="button" class="btn" style="padding:6px 10px">Retirer</button>
-              </div>
-              <div class="muted">PNG/JPG (facultatif). Un aperçu s’affichera après sélection.</div>
-            </div>
-            <div class="grid grid-2">
-              <div><label class="req" for="email">Courriel de communication</label><input id="email" type="email" name="email" required placeholder="contact@entreprise.com" /></div>
-              <div><label for="phone">Téléphone</label><input id="phone" name="Phone" placeholder="514-123-4567" /></div>
-            </div>
-            <div><label for="website">Site Web</label><input id="website" name="Company Website" placeholder="https://..." /></div>
+            <label class="req" for="company">Nom de l'entreprise</label>
+            <input id="company" name="Company Name" required />
+            <label for="email">Courriel</label>
+            <input id="email" type="email" name="email" required placeholder="contact@entreprise.com" />
           </div>
 
-<!-- SECTION: Comment postuler -->
-<div class="section">
-  <h2>Comment postuler</h2>
+          <!-- Comment postuler -->
+          <div class="section">
+            <h2>Comment postuler</h2>
+            <div class="apply-options">
+              <label><input type="checkbox" name="apply_methods" value="Courriel"> Courriel</label>
+              <label><input type="checkbox" name="apply_methods" value="En personne"> En personne</label>
+              <label><input type="checkbox" name="apply_methods" value="Téléphone/SMS"> Téléphone / SMS</label>
+              <label><input type="checkbox" name="apply_methods" value="Site Web"> Site Web</label>
+            </div>
+            <span class="muted">Vous pouvez choisir plusieurs options.</span>
+          </div>
 
-  <fieldset style="border:0;padding:0;margin:0">
-    <legend class="muted" style="position:absolute;left:-9999px">Méthodes de candidature</legend>
-
-    <div class="apply-options">
-      <label><input type="checkbox" name="apply_methods" value="Courriel"> Courriel</label>
-      <label><input type="checkbox" name="apply_methods" value="En personne"> En personne</label>
-      <label><input type="checkbox" name="apply_methods" value="Téléphone/SMS"> Téléphone / SMS</label>
-      <label><input type="checkbox" name="apply_methods" value="Site Web"> Site Web</label>
-    </div>
-  </fieldset>
-
-  <span class="muted">Vous pouvez choisir plusieurs options.</span>
-</div>
-
-
-          <!-- Honeypot anti-bot -->
-          <input type="text" name="website_hp" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
-
-          <!-- TECH -->
           <input type="hidden" name="allow_geocode" value="1">
           <button class="btn" id="submitBtn" type="submit">Continuer au paiement</button>
         </div><!-- /#afterCcq -->
+
       </form>
     </div>
   </div>
-  
+
   <footer>
     <p>&copy; 2025 ZoneConstruction.ca |
       <a href="politique.html">Politique de confidentialité</a> |
@@ -367,152 +307,50 @@
   </footer>
 
   <script>
-    // WRITE endpoint (Apps Script)
-    const API = 'https://script.google.com/macros/s/AKfycbyJ5_OeEPlq4z-2QPaP2IzRBRtz1Gs-p0uMxhNoZBx2jeKbclovTCKb-F1twt0xXZEzdA/exec';
+  const addHidden = el => el.classList.add('hidden');
+  const remHidden = el => el.classList.remove('hidden');
+  const radiosCcq = document.querySelectorAll('input[name="ccq_required"]');
+  const afterCcq = document.getElementById('afterCcq');
+  const ccqBlock = document.getElementById('ccqBlock');
+  const wrapCategorie = document.getElementById('wrapCategorie');
+  const metier = document.getElementById('metier');
+  const niveau = document.getElementById('niveau');
+  const secteur = document.getElementById('secteur');
+  const region = document.getElementById('region');
+  const categorie = document.getElementById('categorie');
+  const wrapTitle = document.getElementById('wrapTitle');
+  const wrapSalaire = document.getElementById('wrapSalaire');
+  const titre = document.getElementById('titre');
 
-    // Helpers
-    const addHidden = el => el.classList.add('hidden');
-    const remHidden = el => el.classList.remove('hidden');
-    const isHidden  = el => !el || el.classList.contains('hidden') || el.offsetParent === null;
+  function updateCcqUI(){
+    const selected = document.querySelector('input[name="ccq_required"]:checked');
+    if(!selected){ addHidden(afterCcq); return; }
 
-    // CCQ radios + wrapper that contains everything else
-    const radiosCcq  = document.querySelectorAll('input[name="ccq_required"]');
-    const afterCcq   = document.getElementById('afterCcq');
+    remHidden(afterCcq);
+    afterCcq.scrollIntoView({behavior:'smooth', block:'start'});
 
-    // General category (shown only if NON)
-    const wrapCategorie = document.getElementById('wrapCategorie');
-    const categorie     = document.getElementById('categorie');
-
-    // 4 CCQ selectors (shown only if OUI)
-const ccqBlock     = document.getElementById('ccqBlock');
-const generalBlock = document.getElementById('wrapCategorie');
-    const metier  = document.getElementById('metier');
-    const niveau  = document.getElementById('niveau');
-    const secteur = document.getElementById('secteur');
-    const region  = document.getElementById('region');
-
-    // Title/Salary (shown only if NON)
-    const wrapTitle   = document.getElementById('wrapTitle');
-    const wrapSalaire = document.getElementById('wrapSalaire');
-    const titre   = document.getElementById('titre');
-    const salaire = document.getElementById('salaire');
-
-function updateCcqUI(){
-  const selected = document.querySelector('input[name="ccq_required"]:checked');
-  if(!selected){
-    addHidden(afterCcq);
-    return;
-  }
-
-  remHidden(afterCcq);
-
-  const ccqOui = selected.value === 'OUI';
-  if (ccqOui){
-    // Show CCQ categories, hide general category
-    remHidden(ccqBlock);
-    addHidden(generalBlock);
-    [metier,niveau,secteur,region].forEach(el => el?.setAttribute('required','required'));
-    categorie?.removeAttribute('required');
-    if (categorie) categorie.selectedIndex = 0;
-    addHidden(wrapTitle);
-    addHidden(wrapSalaire);
-    titre?.removeAttribute('required');
-    if (titre) titre.value = '';
-  } else {
-    // Show general category + title/salary, hide CCQ
-    remHidden(generalBlock);
-    addHidden(ccqBlock);
-    categorie?.setAttribute('required','required');
-    [metier,niveau,secteur,region].forEach(el => {
-      el?.removeAttribute('required');
-      el.selectedIndex = 0;
-    });
-    remHidden(wrapTitle);
-    remHidden(wrapSalaire);
-    titre?.setAttribute('required','required');
-  }
-}
-
-    radiosCcq.forEach(r => r.addEventListener('change', updateCcqUI));
-    document.addEventListener('DOMContentLoaded', updateCcqUI);
-
-    // Logo preview
-    const logoInput = document.getElementById('logo');
-    const logoPreview = document.getElementById('logoPreview');
-    const logoImg = document.getElementById('logoImg');
-    const logoClear = document.getElementById('logoClear');
-
-    if (logoInput){
-      logoInput.addEventListener('change', ()=>{
-        const file = logoInput.files?.[0];
-        if(file){
-          const url = URL.createObjectURL(file);
-          logoImg.src = url;
-          remHidden(logoPreview);
-        }else{
-          addHidden(logoPreview);
-          logoImg.removeAttribute('src');
-        }
-      });
+    const ccqOui = selected.value === 'OUI';
+    if(ccqOui){
+      remHidden(ccqBlock);
+      addHidden(wrapCategorie);
+      [metier,niveau,secteur,region].forEach(el=>el?.setAttribute('required','required'));
+      categorie?.removeAttribute('required');
+      addHidden(wrapTitle); addHidden(wrapSalaire);
+      titre?.removeAttribute('required');
+    }else{
+      remHidden(wrapCategorie);
+      addHidden(ccqBlock);
+      categorie?.setAttribute('required','required');
+      [metier,niveau,secteur,region].forEach(el=>el?.removeAttribute('required'));
+      remHidden(wrapTitle); remHidden(wrapSalaire);
+      titre?.setAttribute('required','required');
     }
-    if (logoClear){
-      logoClear.addEventListener('click', ()=>{
-        logoInput.value = '';
-        logoImg.removeAttribute('src');
-        addHidden(logoPreview);
-      });
-    }
-
-    // Submit flow (Apps Script → Stripe)
-    const form = document.getElementById('jobForm');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-
-      // Validate visible required fields only
-      const requiredFields = [...form.querySelectorAll('[required]')]
-        .filter(el => !isHidden(el) && !isHidden(el.closest('.section')) && !isHidden(el.closest('div')));
-      for(const el of requiredFields){
-        if(!String(el.value||'').trim()){
-          alert('Veuillez remplir tous les champs requis (*)');
-          el.focus(); return;
-        }
-      }
-
-      // Honeypot
-      const hp = form.querySelector('input[name="website_hp"]');
-      if (hp && hp.value) { alert('Requête bloquée.'); return; }
-
-      // Apply methods → CSV
-      const methods = [...document.querySelectorAll('input[name="apply_methods"]:checked')].map(i=>i.value);
-      const fd = new FormData(form);
-      fd.append('Apply Methods', methods.join(', '));
-      fd.append('action','create_session'); // serveur détermine le prix
-
-      // Save for merci.html
-      const plain = Object.fromEntries(fd.entries());
-      sessionStorage.setItem('jobForm', JSON.stringify(plain));
-
-      submitBtn.disabled = true;
-
-      try{
-        const res = await fetch(API, { method:'POST', body:fd, cache:'no-store' });
-        if (!res.ok) throw new Error('API indisponible');
-        const j = await res.json();
-        if(j.ok && j.url){
-          location.href = j.url; // → Stripe Checkout
-        }else{
-          alert('Erreur: ' + (j.error || 'création paiement'));
-          submitBtn.disabled = false;
-        }
-      }catch(err){
-        alert('Erreur réseau: ' + err.message);
-        submitBtn.disabled = false;
-      }
-    });
+  }
+  radiosCcq.forEach(r=>r.addEventListener('change',updateCcqUI));
+  document.addEventListener('DOMContentLoaded',updateCcqUI);
   </script>
 </body>
 </html>
+
 
 
