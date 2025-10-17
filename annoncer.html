@@ -229,16 +229,17 @@
                   <option>Occupation</option>
                 </select>
               </div>
-              <div>
-                <label class="req" for="secteur">Secteur</label>
-                <select id="secteur" name="Secteur">
-                  <option value="" disabled selected>— Sélectionner —</option>
-                  <option>Génie Civil et Voirie</option>
-                  <option>Industriel</option>
-                  <option>Institutionnel et Commercial</option>
-                  <option>Résidentiel</option>
-                </select>
-              </div>
+<div>
+  <label class="req" for="secteur">Secteur (plusieurs choix possibles)</label>
+  <select id="secteur" name="Secteur" multiple size="4">
+    <option>Génie Civil et Voirie</option>
+    <option>Industriel</option>
+    <option>Institutionnel et Commercial</option>
+    <option>Résidentiel</option>
+  </select>
+  <div class="muted">Astuce : Maintenez <strong>Ctrl</strong> (Windows) ou <strong>⌘</strong> (Mac) pour sélectionner plusieurs options.</div>
+</div>
+
               <div>
                 <label class="req" for="region">Région</label>
                 <select id="region" name="Region">
