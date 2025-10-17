@@ -52,24 +52,30 @@
   }
 
   /* ===== Enhanced Section Styling ===== */
-  .section {
-    margin: 36px 0;
-    padding: 22px 24px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-  }
+/* ===== Tighter sections + cleaner headings ===== */
+.section{
+  margin:20px 0;          /* was ~36px */
+  padding:16px 18px;      /* was ~22-24px */
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.section h2{
+  margin:0 0 12px;
+  font-size:1.08rem;
+  font-weight:700;
+  color:var(--text);
+  border-bottom:1px solid var(--line); /* thinner divider */
+  padding-bottom:6px;
+}
 
-  .section h2 {
-    margin-top: 0;
-    margin-bottom: 18px;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text);
-    border-bottom: 2px solid var(--brand);
-    padding-bottom: 6px;
-  }
+/* small helper note shown above the CCQ question */
+.inline-note{
+  margin:0 0 8px;
+  font-size:.95rem;
+  color:#444;
+}
 
   /* Labels & Inputs */
   label { font-weight:700; display:block; margin-bottom:6px; }
@@ -170,14 +176,14 @@
     <div class="card">
       <form id="jobForm" class="grid" novalidate>
         <!-- SECTION: Question CCQ ONLY (visible au départ) -->
-        <div class="section">
-          <h2>Carte de compétence CCQ</h2>
-          <label class="req">Carte de compétence CCQ requise ?</label>
-          <div style="display:flex;gap:16px;margin-top:6px">
-            <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
-            <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
-          </div>
-        </div>
+ <div class="section">
+  <p class="inline-note">Devenir CCQ : répondez d’abord à la question ci-dessous.</p>
+  <label class="req">Carte de compétence CCQ requise ?</label>
+  <div style="display:flex;gap:16px;margin-top:6px">
+    <label><input type="radio" name="ccq_required" value="OUI" required> Oui</label>
+    <label><input type="radio" name="ccq_required" value="NON" required> Non</label>
+  </div>
+</div>
 
         <!-- TOUT LE RESTE — masqué tant que la question n’est pas répondue -->
         <div id="afterCcq" class="hidden">
@@ -194,67 +200,65 @@
           </div>
 
           <!-- CCQ = OUI → 4 sélecteurs CCQ -->
-          <div id="wrapMetier" class="section hidden">
-            <h2>Métier / Occupation</h2>
-            <label class="req" for="metier" class="sr-only">Métier</label>
-            <select id="metier" name="Metier">
-              <option value="" disabled selected>— Sélectionner —</option>
-              <option>Arpenteur/Arpenteuse</option>
-              <option>Briqueteur-maçon/Briqueteuse-maçonne</option>
-              <option>Charpentier-menuisier/Charpentière-menuisière</option>
-              <option>Électricien/Électricienne</option>
-              <option>Plâtrier/Plâtrière</option>
-              <option>Soudeur/Soudeuse</option>
-              <option>Tuyauteur/Tuyauteuse</option>
-            </select>
-          </div>
+<!-- CCQ = OUI → BIG SECTION: Catégories CCQ -->
+<div id="ccqBlock" class="section hidden">
+  <h2>Catégories CCQ</h2>
+  <div class="grid grid-2">
+    <div>
+      <label class="req" for="metier">Métier / Occupation</label>
+      <select id="metier" name="Metier">
+        <option value="" disabled selected>— Sélectionner —</option>
+        <option>Arpenteur/Arpenteuse</option>
+        <option>Briqueteur-maçon/Briqueteuse-maçonne</option>
+        <option>Charpentier-menuisier/Charpentière-menuisière</option>
+        <option>Électricien/Électricienne</option>
+        <option>Plâtrier/Plâtrière</option>
+        <option>Soudeur/Soudeuse</option>
+        <option>Tuyauteur/Tuyauteuse</option>
+      </select>
+    </div>
 
-          <div id="wrapNiveau" class="section hidden">
-            <h2>Niveau</h2>
-            <label class="req" for="niveau" class="sr-only">Niveau</label>
-            <select id="niveau" name="Niveau">
-              <option value="" disabled selected>— Sélectionner —</option>
-              <option>Compagnon</option>
-              <option>Apprenti</option>
-              <option>Occupation</option>
-            </select>
-          </div>
+    <div>
+      <label class="req" for="niveau">Niveau</label>
+      <select id="niveau" name="Niveau">
+        <option value="" disabled selected>— Sélectionner —</option>
+        <option>Compagnon</option>
+        <option>Apprenti</option>
+        <option>Occupation</option>
+      </select>
+    </div>
 
-          <div id="wrapSecteur" class="section hidden">
-            <h2>Secteur</h2>
-            <label class="req" for="secteur" class="sr-only">Secteur</label>
-            <select id="secteur" name="Secteur">
-              <option value="" disabled selected>— Sélectionner —</option>
-              <option>Génie Civil et Voirie</option>
-              <option>Industriel</option>
-              <option>Institutionnel et Commercial</option>
-              <option>Résidentiel</option>
-            </select>
-          </div>
+    <div>
+      <label class="req" for="secteur">Secteur</label>
+      <select id="secteur" name="Secteur">
+        <option value="" disabled selected>— Sélectionner —</option>
+        <option>Génie Civil et Voirie</option>
+        <option>Industriel</option>
+        <option>Institutionnel et Commercial</option>
+        <option>Résidentiel</option>
+      </select>
+    </div>
 
-          <div id="wrapRegion" class="section hidden">
-            <h2>Région</h2>
-            <label class="req" for="region" class="sr-only">Région</label>
-            <select id="region" name="Region">
-              <option value="" disabled selected>— Sélectionner —</option>
-              <option>01 Îles-de-la-Madeleine</option>
-              <option>02 Bas-Saint-Laurent–Gaspésie</option>
-              <option>03 Saguenay–Lac-Saint-Jean</option>
-              <option>04 Québec</option>
-              <option>06 Mauricie–Bois-Francs</option>
-              <option>07 Estrie</option>
-              <option>08 Grand Montréal</option>
-              <option>09 Outaouais</option>
-              <option>10 Abitibi-Témiscamingue</option>
-              <option>11 Côte-Nord</option>
-              <option>13 Baie-James</option>
-              <option>14 Nunavik</option>
-            </select>
-          </div>
-
-          <!-- Détails du poste -->
-          <div class="section">
-            <h2>Détails du poste</h2>
+    <div>
+      <label class="req" for="region">Région</label>
+      <select id="region" name="Region">
+        <option value="" disabled selected>— Sélectionner —</option>
+        <option>01 Îles-de-la-Madeleine</option>
+        <option>02 Bas-Saint-Laurent–Gaspésie</option>
+        <option>03 Saguenay–Lac-Saint-Jean</option>
+        <option>04 Québec</option>
+        <option>06 Mauricie–Bois-Francs</option>
+        <option>07 Estrie</option>
+        <option>08 Grand Montréal</option>
+        <option>09 Outaouais</option>
+        <option>10 Abitibi-Témiscamingue</option>
+        <option>11 Côte-Nord</option>
+        <option>13 Baie-James</option>
+        <option>14 Nunavik</option>
+      </select>
+    </div>
+  </div>
+</div>
 
             <!-- visibles seulement si CCQ = NON -->
             <div id="wrapTitle" class="hidden">
@@ -354,7 +358,7 @@
       </form>
     </div>
   </div>
-
+  
   <footer>
     <p>&copy; 2025 ZoneConstruction.ca |
       <a href="politique.html">Politique de confidentialité</a> |
